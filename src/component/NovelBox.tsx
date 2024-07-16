@@ -1,20 +1,13 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, forwardRef, useState } from 'react';
 import styled from 'styled-components';
-import ConvertBoxWrapper from './ConvertBoxWrapper';
 import { ReactComponent as FileUploadIcon } from '../assets/icons/file_upload_icon.svg';
-import {
-  TitleText,
-  ContentBox,
-  FileButton,
-  ScrollTextArea
-} from '../styles/convertBoxStyles';
+import { GlassBox, TitleText, ContentBox, FileButton, ScrollTextArea } from '../styles/convertBoxStyles';
 
 type props = {
   data: string;
   onScroll: (scrollTop: number) => void;
   scrollTop: number;
 };
-
 
 const NovelBox = ({ data, onScroll, scrollTop }: props) => {
   const [text, setText] = useState<string>('');
@@ -59,17 +52,15 @@ const NovelBox = ({ data, onScroll, scrollTop }: props) => {
       onScroll(textareaRef.current.scrollTop);
     }
   };
-  
+
   return (
-    <ConvertBoxWrapper>
+    <GlassBox hasData={data ? true : false}>
       <TitleText>원고 작성</TitleText>
-      <FileButton onClick={handleButtonClick}><FileUploadIcon width="2rem" height="2rem" />&nbsp;파일 업로드</FileButton>
-      <HiddenFileInput
-        type="file"
-        accept=".txt"
-        ref={fileInputRef}
-        onChange={handleFileUpload}
-      />
+      <FileButton onClick={handleButtonClick}>
+        <FileUploadIcon width="2rem" height="2rem" />
+        &nbsp;파일 업로드
+      </FileButton>
+      <HiddenFileInput type="file" accept=".txt" ref={fileInputRef} onChange={handleFileUpload} />
       <ContentBox>
         <ScrollTextArea
           value={text}
@@ -80,10 +71,8 @@ const NovelBox = ({ data, onScroll, scrollTop }: props) => {
           onScroll={handleScroll}
         />
       </ContentBox>
-    </ConvertBoxWrapper>
-
+    </GlassBox>
   );
-
 };
 
 export default NovelBox;

@@ -31,11 +31,7 @@ const ConvertPage = () => {
             <TitleInput placeholder="제목을 입력해주세요.(n0자)" />
           </TitleInputBox>
           <IndicatorBox>
-            <ConvertIndicator
-              step={step}
-              select={select}
-              setSelect={setSelect}
-            />
+            <ConvertIndicator step={step} select={select} setSelect={setSelect} />
             <div style={{ width: '2rem' }} />
             <SaveButtonBox>
               <SaveButton>
@@ -46,16 +42,8 @@ const ConvertPage = () => {
           </IndicatorBox>
         </TopContainer>
         <ConvertStepWrapper>
-          <NovelBox
-            data="novel"
-            onScroll={handleScroll}
-            scrollTop={scrollTop}
-          />
-          <CharacterBox
-            data="character"
-            onScroll={handleScroll}
-            scrollTop={scrollTop}
-          />
+          <NovelBox data="novel" onScroll={handleScroll} scrollTop={scrollTop} />
+          <CharacterBox data="character" onScroll={handleScroll} scrollTop={scrollTop} />
           <ScriptBox data="script" />
           <StoryboardBox data="story" />
           <StatisticsBox data="" />
@@ -65,23 +53,19 @@ const ConvertPage = () => {
   );
 };
 
+export default ConvertPage;
+
 // background
 const Background = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   background-image: url(${bgImg});
   background-size: cover;
-  height: 100vh;
+  height: calc(100vh - 80px);
 `;
 
 const BackgroundCover = styled.p`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+  height: 100%;
   background-color: rgba(166, 162, 154, 0.4);
   backdrop-filter: blur(3px);
-  padding: 0 5vw;
 `;
 
 // container
@@ -89,22 +73,24 @@ const ConvertStepWrapper = styled.div`
   display: flex;
   overflow-x: scroll;
   gap: 0 10vw;
-  padding: 10vh 0; // TopContainer > height와 값 동일, margin을 주기 위해 값 크게해도 됨
+  height: 80vh;
 `;
 
 const TopContainer = styled.div`
-  position: fixed;
+  height: calc(20vh - 80px);
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  height: 10vh;
-  gap: 10vw;
+  min-width: 41rem;
+  gap: 0 10vw;
 `;
 
 const IndicatorBox = styled.div`
   display: flex;
-  max-width: 650px;
+  width: 41rem;
+  padding: 0.5rem;
   align-items: center;
-  gap: 0.7rem;
+  justify-content: space-between;
 `;
 
 const SaveButtonBox = styled.div`
@@ -115,7 +101,7 @@ const SaveButtonBox = styled.div`
 const TitleInputBox = styled.div`
   display: flex;
   align-items: center;
-  width: 50vw; // equal convert box width
+  min-width: 41rem;
   max-width: 650px;
   height: 3rem;
   padding: 1rem;
@@ -155,5 +141,3 @@ const SaveButton = styled.button`
   background: linear-gradient(90deg, #959b88, #58613e);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
-
-export default ConvertPage;

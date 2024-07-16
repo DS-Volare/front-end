@@ -21,13 +21,7 @@ const ConvertIndicator = ({ step, select, setSelect }: IndicatorProps) => {
     <IndicatorContainer>
       {stepNameList.map((item, index) => {
         return (
-          <IndicatorBox
-            step={step[index]}
-            key={index}
-            selected={select}
-            index={index}
-            onClick={() => setSelect(index)}
-          >
+          <IndicatorBox step={step[index]} key={index} selected={select} index={index} onClick={() => setSelect(index)}>
             {item}
           </IndicatorBox>
         );
@@ -45,8 +39,7 @@ const IndicatorBox = styled.button<boxProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 6vw;
-  max-width: 1.5rem;
+  min-width: 6rem;
   height: 30px;
   padding: 1.1rem;
   font-size: 1rem;

@@ -1,4 +1,27 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+export const GlassBox = styled.div<{ hasData: boolean }>`
+  min-width: 41rem;
+  max-height: 70vh;
+  background: rgba(255, 252, 245, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px;  
+  padding: 1.5rem;
+
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+
+  ${({ hasData }) =>
+    !hasData &&
+    css`
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    `}
+`
 
 export const TitleText = styled.div`
   font-weight: bold;

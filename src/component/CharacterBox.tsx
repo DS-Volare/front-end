@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import ConvertBoxWrapper from './ConvertBoxWrapper';
 import CharacterChipList from './CharacterChipList';
 import {
   TitleText,
@@ -10,7 +9,8 @@ import {
   TutorialTitle,
   TutorialText,
   HighlightedText,
-  ConvertButton
+  ConvertButton,
+  GlassBox,
 } from '../styles/convertBoxStyles';
 
 // dummy data (입력 데이터 예시)
@@ -26,13 +26,17 @@ const inputSentences = [
 // dummy data (하이라이트할 결과 데이터 예시)
 const resultData1 = [
   { text: '왕자는', sent_id: 0, start_eid: 0, end_eid: 0 },
-  { text: '그를', sent_id: 1, start_eid: 3, end_eid: 3 }
+  { text: '그를', sent_id: 1, start_eid: 3, end_eid: 3 },
 ];
 const resultData = [
-  [{ text: '왕자는', sent_id: 0, start_eid: 0, end_eid: 0 },
-  { text: '그를', sent_id: 1, start_eid: 3, end_eid: 3 }],
-  [{ text: '라푼젤의', sent_id: 0, start_eid: 3, end_eid: 3 },
-    { text: '라푼젤을', sent_id: 4, start_eid: 1, end_eid: 1 }]  
+  [
+    { text: '왕자는', sent_id: 0, start_eid: 0, end_eid: 0 },
+    { text: '그를', sent_id: 1, start_eid: 3, end_eid: 3 },
+  ],
+  [
+    { text: '라푼젤의', sent_id: 0, start_eid: 3, end_eid: 3 },
+    { text: '라푼젤을', sent_id: 4, start_eid: 1, end_eid: 1 },
+  ],
 ];
 
 interface Props {
@@ -49,8 +53,8 @@ const CharacterBox = ({ data, onScroll, scrollTop }: Props) => {
   const renderWords = () => {
     return inputSentences.map((sentence, sentIndex) =>
       sentence.map((word, eid) => {
-        const highlightInfo = resultData.find(dataGroup =>
-          dataGroup.some(data => data.sent_id === sentIndex && data.start_eid <= eid && data.end_eid >= eid)
+        const highlightInfo = resultData.find((dataGroup) =>
+          dataGroup.some((data) => data.sent_id === sentIndex && data.start_eid <= eid && data.end_eid >= eid)
         );
 
         if (!highlightInfo) {
@@ -62,8 +66,8 @@ const CharacterBox = ({ data, onScroll, scrollTop }: Props) => {
         }
 
         // highlightInfo가 포함된 groupIndex 찾기
-        const groupIndex = resultData.findIndex(dataGroup =>
-          dataGroup.some(data => data.sent_id === sentIndex && data.start_eid <= eid && data.end_eid >= eid)
+        const groupIndex = resultData.findIndex((dataGroup) =>
+          dataGroup.some((data) => data.sent_id === sentIndex && data.start_eid <= eid && data.end_eid >= eid)
         );
 
         // groupIndex에 따라 색상 설정
@@ -87,7 +91,7 @@ const CharacterBox = ({ data, onScroll, scrollTop }: Props) => {
 
     // groupIndex가 colors 배열의 길이를 넘어가면 추가 색상은 랜덤하게 반환하도록 설정
     if (groupIndex >= colors.length) {
-      return `#${Math.floor(Math.random()*16777215).toString(16)}`; // 랜덤 색상 생성
+      return `#${Math.floor(Math.random() * 16777215).toString(16)}`; // 랜덤 색상 생성
     }
 
     return colors[groupIndex];
@@ -109,34 +113,33 @@ const CharacterBox = ({ data, onScroll, scrollTop }: Props) => {
   return (
     <>
       {data ? (
-        <ConvertBoxWrapper>
+        <GlassBox hasData={true}>
           <TitleText>등장인물 인식 결과</TitleText>
-          <ContentBox style={{height: '27rem'}}>
-            <ScrollText
-              ref={scrollAreaRef}
-              onScroll={handleScroll}
-            >
+          <ContentBox style={{ height: '27rem' }}>
+            <ScrollText ref={scrollAreaRef} onScroll={handleScroll}>
               {renderWords()}
             </ScrollText>
           </ContentBox>
           <TitleText>등장인물</TitleText>
           <CharacterChipList characterList={characterList} />
-        </ConvertBoxWrapper>
+        </GlassBox>
       ) : (
-        <ConvertBoxWrapper mode="tutorial">
+        <GlassBox hasData={false}>
           <TutorialBox>
             <TutorialTitle>#1 소설 원고 입력하기</TutorialTitle>
             <TutorialText>
-              1. 좌측에 소설 원고를 작성합니다.<br />
-              2. <HighlightedText>등장인물 인식 버튼</HighlightedText>을 누릅니다.<br />
+              1. 좌측에 소설 원고를 작성합니다.
+              <br />
+              2. <HighlightedText>등장인물 인식 버튼</HighlightedText>을 누릅니다.
+              <br />
               3. 등장인물 목록을 확인하고 수정합니다.
             </TutorialText>
           </TutorialBox>
           <ConvertButton>등장인물 인식</ConvertButton>
-        </ConvertBoxWrapper>
+        </GlassBox>
       )}
     </>
-  )
+  );
 };
 
 export default CharacterBox;
@@ -147,5 +150,5 @@ interface HighlightedWordProps {
 
 const HighlightedWord = styled.p<HighlightedWordProps>`
   display: inline;
-  background-color: ${props => props.highlightColor};
+  background-color: ${(props) => props.highlightColor};
 `;
