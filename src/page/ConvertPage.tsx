@@ -92,17 +92,11 @@ const ConvertPage = () => {
               />
               <ScriptBox
                 ref={stepTabs[1].element}
-                data={temp[1]}
-                temp={temp}
-                setTemp={setTemp}
                 setSelect={setSelect}
                 onMoveScroll={stepTabs[2].onMoveElement}
               />
               <StoryboardBox
                 ref={stepTabs[2].element}
-                data={temp[2]}
-                temp={temp}
-                setTemp={setTemp}
                 setSelect={setSelect}
                 onMoveScroll={stepTabs[3].onMoveElement}
               />

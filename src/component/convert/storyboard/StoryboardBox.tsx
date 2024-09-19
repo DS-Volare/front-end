@@ -30,15 +30,12 @@ import Spinner from '../../base/Spinner';
 import { spinnerText } from '../../../utils/spinnerText';
 
 type props = {
-  data: string; // 추후 스토리보드 객체로 교체
-  temp: string[];
-  setTemp: (temp: string[]) => void;
   onMoveScroll: () => void;
   setSelect: (select: number) => void;
 };
 
 const StoryboardBox = forwardRef<HTMLDivElement, props>(
-  ({ data, temp, setTemp, onMoveScroll, setSelect }, ref) => {
+  ({ onMoveScroll, setSelect }, ref) => {
     const { controlStatistics, controlStoryboard, startAnimation } =
       useAnimationContext(); // 변환 컴포넌트 애니메이션 컨트롤
     const { step, setStep } = useConvertStep(); // 변환 단계 관리
@@ -56,11 +53,6 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
         const resultScene = result.scene;
         setStoryboard({ scene: resultScene });
         console.log(storyboard);
-
-        step[3] = true;
-        setStep([...step]);
-        temp[2] = 'data';
-        setTemp([...temp]);
 
         // 인디케이터 select 값 변경
         setSelect(3); // 통계로 이동
