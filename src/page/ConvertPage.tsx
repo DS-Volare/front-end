@@ -29,7 +29,6 @@ interface TextProps {
 
 const ConvertPage = () => {
   const { title, setTitle } = useNovelTitleData();
-  const { text } = useNovelData();
   const [step, setStep] = useState([false, false, false, false]); // 진행도
   const [select, setSelect] = useState(0); // 사용자가 선택한 컴포넌트
   const [scrollTop, setScrollTop] = useState(0); // NovelBox, CharacterBox 동시 스크롤
@@ -38,32 +37,8 @@ const ConvertPage = () => {
   // 상호참조, 대본, 스토리보드(버튼 클릭 전/후)
   const [temp, setTemp] = useState(['', '', '']);
 
-  const { saveNovel } = useConvert();
-  const { setNovelId } = useNovelIdData();
-
   const handleScroll = (newScrollTop: number) => {
     setScrollTop(newScrollTop);
-  };
-
-  const NovelSaveMutate = useMutation({
-    mutationKey: mutationKeys.mutateSaveNovel,
-    mutationFn: () => saveNovel(title, text),
-    onSuccess: (result) => {
-      // 추후에 toast 추가
-      setNovelId(result.result.novelId); // 소설 id 저장
-    },
-    onError: () => {
-      console.log('update failure.');
-    },
-    onSettled: () => {
-      console.log('call NovelSaveMutate API');
-    },
-  });
-
-  // 소설 저장 함수
-  const handleSaveNovel = async () => {
-    // func: 소설 저장
-    NovelSaveMutate.mutate();
   };
 
   // 인디케이터 이동
@@ -98,12 +73,6 @@ const ConvertPage = () => {
                 stepTabs={stepTabs}
               />
               <div style={{ width: '2rem' }} />
-              <SaveButtonBox>
-                <SaveButton onClick={handleSaveNovel}>
-                  <SaveFileIcon width={25} />
-                  저장
-                </SaveButton>
-              </SaveButtonBox>
             </IndicatorBox>
           </TopContainer>
           {/* components */}
