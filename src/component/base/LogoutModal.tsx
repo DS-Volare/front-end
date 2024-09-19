@@ -5,6 +5,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { ModalCustomStyle } from '../../styles/mainStyles';
 import { Toast } from '../../styles/ToastStyle';
 import { toastText } from '../../utils/toastText';
+import { useConvert } from '../../hooks/useConvert';
 
 interface ModalProps {
   isOpen: boolean;
@@ -14,6 +15,7 @@ interface ModalProps {
 
 const LogoutModal = ({ isOpen, setModalIsOpen, setIsLogin }: ModalProps) => {
   const { logout } = useAuth();
+  const { clearConvertData } = useConvert();
 
   const handleLogout = async () => {
     const complete = await logout();
@@ -21,6 +23,7 @@ const LogoutModal = ({ isOpen, setModalIsOpen, setIsLogin }: ModalProps) => {
     if (complete) {
       setModalIsOpen(false);
       setIsLogin(false);
+      clearConvertData(); // context 데이터 비움
       Toast.success(toastText.logoutSuccess);
     } else {
       setModalIsOpen(false);
