@@ -28,6 +28,8 @@ import { mutationKeys } from '../../../utils/queryKeys';
 import { useConvert } from '../../../hooks/useConvert';
 import Spinner from '../../base/Spinner';
 import { spinnerText } from '../../../utils/spinnerText';
+import { Toast } from '../../../styles/ToastStyle';
+import { toastText } from '../../../utils/toastText';
 
 type props = {
   onMoveScroll: () => void;
@@ -76,6 +78,11 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
       StoryboardMutate.mutate();
     };
 
+    const errorProcess = () => {
+      setIsClick(false);
+      Toast.error(toastText.scriptError);
+    };
+
     return (
       <motion.div ref={ref} animate={controlStoryboard} style={{ opacity: 0 }}>
         {isClick ? (
@@ -108,9 +115,7 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
                     </ContentBox>
                   </>
                 )}
-                {StoryboardMutate.isError && (
-                  <TitleText>스토리보드 변환을 실패했습니다..</TitleText>
-                )}
+                {StoryboardMutate.isError && errorProcess()}
               </>
             ) : (
               <Spinner text={spinnerText.storyboard} />

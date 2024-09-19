@@ -26,6 +26,8 @@ import Spinner from '../../base/Spinner';
 import { spinnerText } from '../../../utils/spinnerText';
 import { useMutation } from '@tanstack/react-query';
 import { mutationKeys, queryKeys } from '../../../utils/queryKeys';
+import { Toast } from '../../../styles/ToastStyle';
+import { toastText } from '../../../utils/toastText';
 
 interface Props {
   onScroll: (scrollTop: number) => void;
@@ -196,6 +198,11 @@ const CharacterBox = ({
     CharacterMutate.mutate();
   };
 
+  const errorProcess = () => {
+    setIsClick(false);
+    Toast.error(toastText.scriptError);
+  };
+
   return (
     <motion.div>
       {isClick ? (
@@ -215,13 +222,7 @@ const CharacterBox = ({
                   <CharacterChipList />
                 </>
               )}
-              {CharacterMutate.isError && (
-                <>
-                  <TitleText>
-                    등장인물 목록을 불러오는 것을 실패했습니다..
-                  </TitleText>
-                </>
-              )}
+              {CharacterMutate.isError && errorProcess()}
             </>
           ) : (
             <Spinner text={spinnerText.character} />

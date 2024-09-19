@@ -27,6 +27,8 @@ import { useMutation } from '@tanstack/react-query';
 import { mutationKeys } from '../../../utils/queryKeys';
 import Spinner from '../../base/Spinner';
 import { spinnerText } from '../../../utils/spinnerText';
+import { Toast } from '../../../styles/ToastStyle';
+import { toastText } from '../../../utils/toastText';
 
 type props = {
   onMoveScroll: () => void;
@@ -80,6 +82,11 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
       ScriptMutate.mutate();
     };
 
+    const errorProcess = () => {
+      setIsClick(false);
+      Toast.error(toastText.scriptError);
+    };
+
     return (
       <motion.div ref={ref} animate={controlScripts} style={{ opacity: 0 }}>
         {isClick ? (
@@ -100,9 +107,7 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
                     </ContentBox>
                   </>
                 )}
-                {ScriptMutate.isError && (
-                  <TitleText>대본 변환을 실패했습니다..</TitleText>
-                )}
+                {ScriptMutate.isError && errorProcess()}
               </>
             ) : (
               <Spinner text={spinnerText.scripts} />
