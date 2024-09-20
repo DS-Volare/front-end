@@ -41,7 +41,7 @@ const StatisticsBox = forwardRef<HTMLDivElement, props>(({ data }, ref) => {
     <motion.div
       ref={ref}
       animate={controlStatistics}
-      style={{ display: 'none', opacity: 100 }}
+      style={{ display: 'none', opacity: 0 }}
     >
       <GlassBox hasData={true}>
         <TitleText>통계</TitleText>

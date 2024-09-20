@@ -91,7 +91,7 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
       <motion.div
         ref={ref}
         animate={controlScripts}
-        style={{ display: 'none', opacity: 100 }}
+        style={{ display: 'none', opacity: 0 }}
       >
         {isClick ? (
           <GlassBox hasData={true}>

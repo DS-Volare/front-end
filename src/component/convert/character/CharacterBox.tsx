@@ -200,7 +200,7 @@ const CharacterBox = ({
 
   const errorProcess = () => {
     setIsClick(false);
-    Toast.error(toastText.scriptError);
+    Toast.error(toastText.characterError);
   };
 
   return (
