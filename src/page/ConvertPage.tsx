@@ -169,11 +169,15 @@ const BackgroundCover = styled.div`
   flex: 1;
   background-color: rgba(166, 162, 154, 0.4);
   backdrop-filter: blur(3px);
-  padding: 0 6.5vw;
+  padding: 0 13rem;
   ${css`
     height: calc(100vh - 80px);
   `}
   overflow: hidden;
+
+  @media ${({ theme }) => theme.mediaSize.xl} {
+    padding: 0 15rem;
+  }
 `;
 
 // container

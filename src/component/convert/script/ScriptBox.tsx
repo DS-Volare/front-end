@@ -88,7 +88,11 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
     };
 
     return (
-      <motion.div ref={ref} animate={controlScripts} style={{ opacity: 0 }}>
+      <motion.div
+        ref={ref}
+        animate={controlScripts}
+        style={{ display: 'none', opacity: 100 }}
+      >
         {isClick ? (
           <GlassBox hasData={true}>
             {!ScriptMutate.isPending ? (

@@ -84,7 +84,11 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
     };
 
     return (
-      <motion.div ref={ref} animate={controlStoryboard} style={{ opacity: 0 }}>
+      <motion.div
+        ref={ref}
+        animate={controlStoryboard}
+        style={{ display: 'none', opacity: 100 }}
+      >
         {isClick ? (
           <GlassBox hasData={true}>
             {!StoryboardMutate.isPending ? (
