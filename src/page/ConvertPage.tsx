@@ -22,6 +22,8 @@ import {
 } from '../context/convertDataContext';
 import { useMutation } from '@tanstack/react-query';
 import { mutationKeys } from '../utils/queryKeys';
+import { useNavigate } from 'react-router-dom';
+import PopPageModal from '../component/base/PopPageModal';
 
 interface TextProps {
   color: string;
@@ -37,6 +39,7 @@ type bgProps = {
 const ConvertPage = () => {
   const { title, setTitle } = useNovelTitleData();
   const [select, setSelect] = useState(0); // 사용자가 선택한 컴포넌트
+  const [isOpen, setModalIsOpen] = useState(false);
   const [scrollTop, setScrollTop] = useState(0); // NovelBox, CharacterBox 동시 스크롤
   const [fadeOut, setFadeOut] = useState(false); // 배경 애니메이션 fade 상태
   const [currentBg, setCurrentBg] = useState(bgImgOne);
@@ -53,6 +56,29 @@ const ConvertPage = () => {
     useMoveScroll('스토리보드'),
     useMoveScroll('통계'),
   ];
+
+  // 뒤로가기, 새로고침 이벤트 처리
+  useEffect(() => {
+    const preventGoBack = (event: Event) => {
+      event.preventDefault();
+      console.log('엥?');
+      setModalIsOpen(true);
+    };
+
+    const preventLoad = (event: Event) => {
+      event.preventDefault();
+    };
+    console.log('omg');
+    window.history.pushState(null, '', window.location.href);
+
+    window.addEventListener('popstate', preventGoBack); // 뒤로가기 event
+    window.addEventListener('beforeunload', preventLoad); // 새로고침 event
+
+    return () => {
+      window.removeEventListener('popstate', preventGoBack);
+      window.removeEventListener('beforeunload', preventLoad);
+    };
+  }, []);
 
   const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -82,7 +108,6 @@ const ConvertPage = () => {
   return (
     <Background fade={fadeOut} bgImg={currentBg}>
       <BackgroundCover>
-        <ConvertStepProvider>
         <TopContainer>
           <TitleInputBox>
             <TitleInput
@@ -97,7 +122,6 @@ const ConvertPage = () => {
               setSelect={setSelect}
               stepTabs={stepTabs}
             />
-            <div style={{ width: '2rem' }} />
           </IndicatorBox>
         </TopContainer>
         {/* components */}
@@ -128,8 +152,9 @@ const ConvertPage = () => {
             <StatisticsBox ref={stepTabs[3].element} data="" />
           </ConvertStepWrapper>
         </AnimationProvider>
-        </ConvertStepProvider>
         <ChatbotBox />
+        {/* pop page modal */}
+        <PopPageModal isOpen={isOpen} setModalIsOpen={setModalIsOpen} />
       </BackgroundCover>
     </Background>
   );
@@ -165,7 +190,6 @@ const Background = styled.div<bgProps>`
 
 const BackgroundCover = styled.div`
   display: flex;
-  flex-direction: column;
   flex: 1;
   background-color: rgba(166, 162, 154, 0.4);
   backdrop-filter: blur(3px);
