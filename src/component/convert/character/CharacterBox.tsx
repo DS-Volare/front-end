@@ -26,7 +26,6 @@ import Spinner from '../../base/Spinner';
 import { spinnerText } from '../../../utils/spinnerText';
 import { useMutation } from '@tanstack/react-query';
 import { mutationKeys, queryKeys } from '../../../utils/queryKeys';
-import { inputSentences1, resultData1 } from './characterDummyData';
 
 interface Props {
   onScroll: (scrollTop: number) => void;
@@ -91,8 +90,6 @@ const CharacterBox = ({
   const [highlightColors, setHighlightColors] = useState<string[]>(['#F0E393', '#BED2C7', '#EBB57D', '#A8C2EB', '#EB8E43']);
   
   useEffect(() => {
-    setInputSentences(inputSentences1); // 더미데이터
-    setResultData(resultData1);         // 더미데이터
     setHighlightColors([...highlightColors, generateRandomColor()])
   }, [resultData]);
 
@@ -177,19 +174,7 @@ const CharacterBox = ({
 
   return (
     <motion.div>
-
-      <GlassBox hasData={true}>
-        <TitleText>등장인물 인식 결과</TitleText>
-        <ContentBox style={{ height: '27rem' }}>
-          <ScrollText ref={scrollAreaRef} onScroll={handleScroll}>
-            {renderWords()}
-          </ScrollText>
-        </ContentBox>
-        <TitleText>등장인물</TitleText>
-        <CharacterChipList />
-      </GlassBox>
-
-      {/* {isClick ? (
+      {isClick ? (
         // temporary
         <GlassBox hasData={true}>
           {!CharacterMutate.isPending ? (
@@ -231,7 +216,7 @@ const CharacterBox = ({
               3. 등장인물 목록을 확인하고 수정합니다.
             </TutorialText>
           </TutorialBox>
-          소설 작성 후 버튼 활성화
+          {/* 소설 작성 후 버튼 활성화 */}
           <ConvertButton
             disabled={step[0]}
             onClick={handleClick}
@@ -240,7 +225,7 @@ const CharacterBox = ({
             등장인물 인식
           </ConvertButton>
         </GlassBox>
-      )} */}
+      )}
     </motion.div>
   );
 };
