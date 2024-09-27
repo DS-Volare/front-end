@@ -4,18 +4,39 @@ import theme from '../../styles/theme';
 import { motion, AnimationControls } from 'framer-motion';
 
 interface ScriptListProps {
-  date: string;
+  updatedAt: string;
   title: string;
   control: AnimationControls;
+  image: string;
 }
 
-const ScriptListCard = ({ date, title, control }: ScriptListProps) => {
+const ScriptListCard = ({
+  updatedAt,
+  title,
+  control,
+  image,
+}: ScriptListProps) => {
+  const formatDate = (date: string) => {
+    const dateobj = new Date(date);
+    const year = String(dateobj.getFullYear()); // 'yy' 포맷
+    const month = String(dateobj.getMonth() + 1).padStart(2, '0'); // 'mm' 포맷
+    const day = String(dateobj.getDate()).padStart(2, '0'); // 'dd' 포맷
+    return `${year}-${month}-${day}`;
+  };
+
   return (
     <CardBox animate={control}>
-      <Image />
+      <Image
+        animate={control}
+        src={
+          image == '로고url'
+            ? require('../../assets/background/list-basic-image.png')
+            : image
+        }
+      />
       <ContentBox>
         <ContentText style={{ color: theme.colors.darkBrown }}>
-          {date}
+          {formatDate(updatedAt)}
         </ContentText>
         <div style={{ flex: 1 }} />
         <ContentText
@@ -51,11 +72,12 @@ const ContentBox = styled.div`
 `;
 
 // component
-const Image = styled.img`
+const Image = styled(motion.img)`
   width: 260px;
   height: 150px;
-  border-radius: 1.2rem 0.7rem 0.7rem 0.7rem;
+  border-radius: 1rem 0.7rem 0.7rem 0.7rem;
   background-color: white;
+  background-size: cover;
 `;
 
 export default ScriptListCard;

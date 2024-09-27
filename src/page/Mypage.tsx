@@ -8,27 +8,36 @@ import { useAnimation } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { queryKeys } from '../utils/queryKeys';
 import { useAuth } from '../hooks/useAuth';
+import { useConvert } from '../hooks/useConvert';
 
 interface ScriptListProps {
-  date: string;
+  updatedAt: string;
   title: string;
+  image: string;
 }
 
 const MyPage = () => {
   const [page, setPage] = useState<number>(1);
-  const totalScript = dummyData.length; // 총 게시물 수
-  const pageRange = 6; // 페이지당 보여줄 게시물 수
-  const startPost = (page - 1) * pageRange + 1; // 시작 게시물 번호
-  const endPost = startPost + pageRange - 1; // 끝 게시물 번호
+  //const totalScript = dummyData.length; // 총 게시물 수
+  //const pageRange = 6; // 페이지당 보여줄 게시물 수
+  //const startPost = (page - 1) * pageRange + 1; // 시작 게시물 번호
+  //const endPost = startPost + pageRange - 1; // 끝 게시물 번호
 
   // pagenation animate
   const control = useAnimation();
 
   const { userInfoFunc } = useAuth();
+  const { convertList } = useConvert();
 
   const userInfoQuery = useQuery({
     queryKey: queryKeys.userinfo,
     queryFn: () => userInfoFunc(),
+  });
+
+  const listQuery = useQuery({
+    queryKey: [queryKeys.list, page],
+    queryFn: () => convertList(page),
+    enabled: page !== null, //  type: boolean
   });
 
   const pagenationAnimate = () => {
@@ -44,14 +53,14 @@ const MyPage = () => {
   };
 
   const ScriptListfunc = (data: ScriptListProps[]) => {
-    // if data.length >= 6
-    const list = data.slice(startPost - 1, endPost).map((item, index) => {
+    const list = data.map((item, index) => {
       return (
         <ScriptListCard
           control={control}
           key={index}
-          date={item.date}
+          updatedAt={item.updatedAt}
           title={item.title}
+          image={item.image}
         />
       );
     });
@@ -74,15 +83,22 @@ const MyPage = () => {
             </UserInfoTextBox>
             {/* scripts list */}
             <ListContainer>
-              <ItemsContainer>{ScriptListfunc(dummyData)}</ItemsContainer>
-              <div style={{ flex: 1 }} />
-              <Pagenation
-                page={page}
-                setPage={setPage}
-                totalScript={totalScript}
-                pageRange={pageRange}
-                animate={pagenationAnimate}
-              />
+              {!listQuery.isFetching && (
+                <>
+                  <ItemsContainer>
+                    {ScriptListfunc(listQuery.data.result.userConvertListDTO)}
+                  </ItemsContainer>
+                  <div style={{ flex: 1 }} />
+                  <Pagenation
+                    page={page}
+                    setPage={setPage}
+                    totalScript={listQuery.data.result.totalItems}
+                    animate={pagenationAnimate}
+                    hasPrevious={listQuery.data.result.hasPrevious}
+                    hasNext={listQuery.data.result.hasNext}
+                  />
+                </>
+              )}
             </ListContainer>
           </LayoutWrapper>
         </BackgroundCover>

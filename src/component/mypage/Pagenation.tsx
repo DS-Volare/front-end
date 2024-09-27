@@ -7,18 +7,21 @@ type pagenationProps = {
   page: number;
   setPage: (page: number) => void;
   totalScript: number;
-  pageRange: number;
   animate: () => void;
+  hasPrevious: boolean;
+  hasNext: boolean;
 };
 
 const Pagenation = ({
   page,
   setPage,
   totalScript,
-  pageRange,
   animate,
+  hasPrevious,
+  hasNext,
 }: pagenationProps) => {
   const btnRange = 5; // 페이지네이션 버튼 수
+  const pageRange = 6; // 한 페이지당 목록 수
   const currentSet = Math.ceil(page / btnRange); // 현재 버튼이 몇 번째 세트인지 나타내는 수
   const startPage = (currentSet - 1) * btnRange + 1; // 현재 보여질 버튼의 첫 번째 수
   const endPage = startPage + btnRange - 1; // 현재 보여질 끝 버튼의 수
