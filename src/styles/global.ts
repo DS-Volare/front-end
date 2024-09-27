@@ -55,7 +55,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   ::-webkit-scrollbar-track {
-    background: white;
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
