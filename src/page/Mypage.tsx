@@ -84,13 +84,15 @@ const MyPage = () => {
                     ScriptListfunc(listQuery.data.result.userConvertListDTO)}
                 </ItemsContainer>
                 <div style={{ flex: 1 }} />
-                <Pagenation
-                  page={page}
-                  setPage={setPage}
-                  totalScript={listQuery.data.result.totalItems}
-                  hasPrevious={listQuery.data.result.hasPrevious}
-                  hasNext={listQuery.data.result.hasNext}
-                />
+                {!listQuery.isFetching && (
+                  <Pagenation
+                    page={page}
+                    setPage={setPage}
+                    totalScript={listQuery.data.result.totalItems}
+                    hasPrevious={listQuery.data.result.hasPrevious}
+                    hasNext={listQuery.data.result.hasNext}
+                  />
+                )}
               </>
             </ListContainer>
           </LayoutWrapper>
