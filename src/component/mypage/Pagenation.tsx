@@ -7,7 +7,6 @@ type pagenationProps = {
   page: number;
   setPage: (page: number) => void;
   totalScript: number;
-  animate: () => void;
   hasPrevious: boolean;
   hasNext: boolean;
 };
@@ -16,7 +15,6 @@ const Pagenation = ({
   page,
   setPage,
   totalScript,
-  animate,
   hasPrevious,
   hasNext,
 }: pagenationProps) => {
@@ -28,7 +26,6 @@ const Pagenation = ({
   const totalSet = Math.ceil(Math.ceil(totalScript / pageRange) / btnRange); // 전체 버튼 세트 수
 
   const handleClick = (index: number) => {
-    animate(); // animation
     setPage(startPage + index); // page setting
   };
 

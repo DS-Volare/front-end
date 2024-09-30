@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { queryKeys } from '../utils/queryKeys';
 import { useAuth } from '../hooks/useAuth';
 import { useConvert } from '../hooks/useConvert';
+import SkeletonListCard from '../component/mypage/SkeletonListCard';
 
 interface ScriptListProps {
   updatedAt: string;
@@ -18,10 +19,6 @@ interface ScriptListProps {
 
 const MyPage = () => {
   const [page, setPage] = useState<number>(1);
-  //const totalScript = dummyData.length; // 총 게시물 수
-  //const pageRange = 6; // 페이지당 보여줄 게시물 수
-  //const startPost = (page - 1) * pageRange + 1; // 시작 게시물 번호
-  //const endPost = startPost + pageRange - 1; // 끝 게시물 번호
 
   // pagenation animate
   const control = useAnimation();
@@ -40,16 +37,13 @@ const MyPage = () => {
     enabled: page !== null, //  type: boolean
   });
 
-  const pagenationAnimate = () => {
-    control.start({
-      height: ['50%', '100%'],
-      opacity: [0.3, 1],
-      transition: {
-        duration: 1.2,
-        ease: 'easeInOut',
-        times: [0, 0.2, 0.5, 0.8, 1],
-      },
-    });
+  // skeleton UI
+  const skeletonListFunc = () => {
+    const skeletonCards = [];
+    for (let i = 0; i < 6; i++) {
+      skeletonCards.push(<SkeletonListCard key={i} />);
+    }
+    return skeletonCards;
   };
 
   const ScriptListfunc = (data: ScriptListProps[]) => {
@@ -83,22 +77,21 @@ const MyPage = () => {
             </UserInfoTextBox>
             {/* scripts list */}
             <ListContainer>
-              {!listQuery.isFetching && (
-                <>
-                  <ItemsContainer>
-                    {ScriptListfunc(listQuery.data.result.userConvertListDTO)}
-                  </ItemsContainer>
-                  <div style={{ flex: 1 }} />
-                  <Pagenation
-                    page={page}
-                    setPage={setPage}
-                    totalScript={listQuery.data.result.totalItems}
-                    animate={pagenationAnimate}
-                    hasPrevious={listQuery.data.result.hasPrevious}
-                    hasNext={listQuery.data.result.hasNext}
-                  />
-                </>
-              )}
+              <>
+                <ItemsContainer>
+                  {listQuery.isFetching && skeletonListFunc()}
+                  {!listQuery.isFetching &&
+                    ScriptListfunc(listQuery.data.result.userConvertListDTO)}
+                </ItemsContainer>
+                <div style={{ flex: 1 }} />
+                <Pagenation
+                  page={page}
+                  setPage={setPage}
+                  totalScript={listQuery.data.result.totalItems}
+                  hasPrevious={listQuery.data.result.hasPrevious}
+                  hasNext={listQuery.data.result.hasNext}
+                />
+              </>
             </ListContainer>
           </LayoutWrapper>
         </BackgroundCover>
