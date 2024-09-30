@@ -53,6 +53,12 @@ const ScriptListCard = ({
 const ContentText = styled.span`
   width: 200px;
   font-size: 0.9rem;
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `;
 
 // box
