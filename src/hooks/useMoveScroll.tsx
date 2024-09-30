@@ -4,7 +4,9 @@ import { useRef } from 'react';
 export const useMoveScroll = (name: string) => {
   const element = useRef<HTMLDivElement>(null);
   const onMoveElement = () => {
-    console.log(element);
+    if (element.current) {
+      element.current.style.display = 'block'; // display: none 해제
+    }
     element.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   };
 

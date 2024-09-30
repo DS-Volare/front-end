@@ -1,34 +1,28 @@
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
-import { useAuth } from '../../hooks/useAuth';
 import { ModalCustomStyle } from '../../styles/mainStyles';
-import { Toast } from '../../styles/ToastStyle';
-import { toastText } from '../../utils/toastText';
 import { useConvert } from '../../hooks/useConvert';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 interface ModalProps {
   isOpen: boolean;
   setModalIsOpen: (value: boolean) => void;
-  setIsLogin: (value: boolean) => void;
 }
 
-const LogoutModal = ({ isOpen, setModalIsOpen, setIsLogin }: ModalProps) => {
-  const { logout } = useAuth();
+const PopPageModal = ({ isOpen, setModalIsOpen }: ModalProps) => {
+  const navigate = useNavigate();
   const { clearConvertData } = useConvert();
+  const handleButtonClick = () => {
+    setModalIsOpen(false);
+    clearConvertData(); // convert context data 삭제
+    window.history.back();
+  };
 
-  const handleLogout = async () => {
-    const complete = await logout();
-    // 로그아웃 성공 여부 처리
-    if (complete) {
-      setModalIsOpen(false);
-      setIsLogin(false);
-      clearConvertData(); // context 데이터 비움
-      Toast.success(toastText.logoutSuccess);
-    } else {
-      setModalIsOpen(false);
-      Toast.error(toastText.logoutError);
-    }
+  const handleCancelClick = () => {
+    setModalIsOpen(false);
+    window.history.pushState(null, '', window.location.href);
   };
 
   return (
@@ -37,25 +31,26 @@ const LogoutModal = ({ isOpen, setModalIsOpen, setIsLogin }: ModalProps) => {
       onRequestClose={() => setModalIsOpen(false)}
       style={ModalCustomStyle}
       ariaHideApp={false}
-      shouldCloseOnOverlayClick={true}
+      shouldCloseOnOverlayClick={false}
     >
       {/* exit */}
       <ExitContainer></ExitContainer>
       {/* content */}
       <LayoutContainer>
         <Text style={{ color: theme.colors.darkBrown }}>
-          로그아웃 하시겠습니까?
+          뒤로가기 하실건가요? <br />
+          뒤로가기 하면 데이터가 저장되지 않아요.
         </Text>
         <div style={{ height: '80px' }} />
         <ButtonBox>
           <Button
-            onClick={handleLogout}
+            onClick={handleButtonClick}
             style={{ backgroundColor: theme.colors.olive }}
           >
             네
           </Button>
           <Button
-            onClick={() => setModalIsOpen(false)}
+            onClick={handleCancelClick}
             style={{
               backgroundColor: theme.colors.beige,
               color: theme.colors.darkBrown,
@@ -72,6 +67,7 @@ const LogoutModal = ({ isOpen, setModalIsOpen, setIsLogin }: ModalProps) => {
 // text
 const Text = styled.span`
   font-size: 1rem;
+  text-align: center;
 `;
 
 // container
@@ -102,4 +98,4 @@ const Button = styled.button`
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
 `;
 
-export default LogoutModal;
+export default PopPageModal;

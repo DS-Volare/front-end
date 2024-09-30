@@ -1,14 +1,28 @@
 import axios from 'axios';
 import { useUser } from './useUser';
-import { useNovelIdData } from '../context/convertDataContext';
+import {
+  useNovelIdData,
+  useStoryboardData,
+  useCharaterData,
+  useNovelData,
+  useNovelTitleData,
+  useScriptData,
+  useScriptIdData,
+} from '../context/convertDataContext';
 import { Script } from '../types';
 import { useAuth } from './useAuth';
 import { useAxiosInstances } from './useAxiosInstance';
 
 export const useConvert = () => {
   const { getTokenUser } = useUser();
-  const { novelId } = useNovelIdData();
+  const { novelId, setNovelId } = useNovelIdData();
   const { reissue } = useAuth();
+  const { setStoryboard } = useStoryboardData();
+  const { setCharacterList } = useCharaterData();
+  const { setText } = useNovelData();
+  const { setTitle } = useNovelTitleData();
+  const { setScript } = useScriptData();
+  const { setScriptId } = useScriptIdData();
 
   // axios instance 선언
   const { createAxiosInstance } = useAxiosInstances();
@@ -171,6 +185,17 @@ export const useConvert = () => {
     }
   };
 
+  // clear context data
+  const clearConvertData = () => {
+    setText('');
+    setTitle('');
+    setCharacterList([]);
+    setScript({ scene: [] });
+    setStoryboard({ scene: [] });
+    setScriptId(0);
+    setNovelId('');
+  };
+
   return {
     saveNovel,
     cognizeCharacter,
@@ -180,5 +205,6 @@ export const useConvert = () => {
     getChatList,
     apperanceRate,
     convertStatistics,
+    clearConvertData,
   };
 };
