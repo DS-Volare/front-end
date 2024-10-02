@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import bgImg from '../assets/background/bg-1.png';
 import Pagenation from '../component/mypage/Pagenation';
@@ -19,6 +19,9 @@ interface ScriptListProps {
 
 const MyPage = () => {
   const [page, setPage] = useState<number>(1);
+  const [totalScript, setTotalScript] = useState(0);
+  const [hasNext, setHasNext] = useState(false);
+  const [hasPrevious, setHasPrevious] = useState(false);
 
   // pagenation animate
   const control = useAnimation();
@@ -62,6 +65,14 @@ const MyPage = () => {
     return list;
   };
 
+  useEffect(() => {
+    if (listQuery.data) {
+      setHasNext(listQuery.data.result.hasPrevious);
+      setHasPrevious(listQuery.data.result.hasPrevious);
+      setTotalScript(listQuery.data.result.totalItems);
+    }
+  }, [listQuery.data]);
+
   return (
     <Background>
       <BackgroundImage>
@@ -84,15 +95,13 @@ const MyPage = () => {
                     ScriptListfunc(listQuery.data.result.userConvertListDTO)}
                 </ItemsContainer>
                 <div style={{ flex: 1 }} />
-                {!listQuery.isFetching && (
-                  <Pagenation
-                    page={page}
-                    setPage={setPage}
-                    totalScript={listQuery.data.result.totalItems}
-                    hasPrevious={listQuery.data.result.hasPrevious}
-                    hasNext={listQuery.data.result.hasNext}
-                  />
-                )}
+                <Pagenation
+                  page={page}
+                  setPage={setPage}
+                  totalScript={totalScript}
+                  hasPrevious={hasPrevious}
+                  hasNext={hasNext}
+                />
               </>
             </ListContainer>
           </LayoutWrapper>
