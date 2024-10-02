@@ -7,7 +7,6 @@ import {
 
 interface IndicatorProps {
   // 모든 단계를 거쳤는지 여부
-  step: boolean[]; // 현재 사용자가 위치한 단계
   select: number;
   setSelect: (select: number) => void;
   stepTabs: Array<UseMoveScrollReturn>;
@@ -26,7 +25,7 @@ type boxProps = {
 };
 
 const ConvertIndicator = ({ select, setSelect, stepTabs }: IndicatorProps) => {
-  const { step, setStep } = useConvertStep();
+  const { step } = useConvertStep();
 
   return (
     <IndicatorContainer>
@@ -63,7 +62,7 @@ const IndicatorBox = styled.button.attrs((props) => ({
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 7.5rem;
+  min-width: 10rem;
   height: 30px;
   padding: 1.1rem;
   font-size: 1rem;

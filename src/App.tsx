@@ -12,6 +12,7 @@ import { ConvertDataProvider } from './context/convertDataContext';
 import { MainPageAnimateProvider } from './context/mainAnimationContext';
 import { useTokenModal } from './context/tokenModalContext';
 import TokenExpireModal from './component/base/TokenExpireModal';
+import { ConvertStepProvider } from './context/convertStepContext';
 
 // initialize queryClient
 const queryClient = new QueryClient({
@@ -30,14 +31,16 @@ const App = () => {
       <MainPageAnimateProvider>
         <ConvertDataProvider>
           <QueryClientProvider client={queryClient}>
-            <Router>
-              <NavBar />
-              <Routes>
-                <Route path="/main/" element={<MainPage />} />
-                <Route path="/mypage/" element={<MyPage />} />
-                <Route path="/convert/" element={<ConvertPage />} />
-              </Routes>
-            </Router>
+            <ConvertStepProvider>
+              <Router>
+                <NavBar />
+                <Routes>
+                  <Route path="/main/" element={<MainPage />} />
+                  <Route path="/mypage/" element={<MyPage />} />
+                  <Route path="/convert/" element={<ConvertPage />} />
+                </Routes>
+              </Router>
+            </ConvertStepProvider>
           </QueryClientProvider>
         </ConvertDataProvider>
       </MainPageAnimateProvider>

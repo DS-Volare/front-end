@@ -1,16 +1,18 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import ConvertIndicator from '../component/convert/ConvertIndicator';
 import NovelBox from '../component/convert/novel/NovelBox';
 import CharacterBox from '../component/convert/character/CharacterBox';
 import ScriptBox from '../component/convert/script/ScriptBox';
 import StoryboardBox from '../component/convert/storyboard/StoryboardBox';
 import StatisticsBox from '../component/convert/statistics/StatisticsBox';
-import bgImg from '../assets/background/bg-5.png';
+import bgImgOne from '../assets/background/bg-5.png';
+import bgImgTwo from '../assets/background/bg-1.png';
+import bgImgThree from '../assets/background/bg-6.png';
 import { ReactComponent as SaveFileIcon } from '../assets/icons/save_file_icon.svg';
 import { useMoveScroll } from '../hooks/useMoveScroll';
 import { AnimationProvider } from '../context/animationContext';
-import { ConvertStepProvider } from '../context/convertStepContext';
+import { useConvertStep } from '../context/convertStepContext';
 import ChatbotBox from '../component/convert/chat/ChatbotBox';
 import { useConvert } from '../hooks/useConvert';
 import {
@@ -20,6 +22,8 @@ import {
 } from '../context/convertDataContext';
 import { useMutation } from '@tanstack/react-query';
 import { mutationKeys } from '../utils/queryKeys';
+import { useNavigate } from 'react-router-dom';
+import PopPageModal from '../component/base/PopPageModal';
 
 interface TextProps {
   color: string;
@@ -27,43 +31,22 @@ interface TextProps {
   weight: string;
 }
 
+type bgProps = {
+  bgImg: string;
+  fade: boolean;
+};
+
 const ConvertPage = () => {
   const { title, setTitle } = useNovelTitleData();
-  const { text } = useNovelData();
-  const [step, setStep] = useState([false, false, false, false]); // 진행도
   const [select, setSelect] = useState(0); // 사용자가 선택한 컴포넌트
+  const [isOpen, setModalIsOpen] = useState(false);
   const [scrollTop, setScrollTop] = useState(0); // NovelBox, CharacterBox 동시 스크롤
-
-  // 화면 애니메이션을 위한 임시 상태 관리, 추후에 api 호출로 수정
-  // 상호참조, 대본, 스토리보드(버튼 클릭 전/후)
-  const [temp, setTemp] = useState(['', '', '']);
-
-  const { saveNovel } = useConvert();
-  const { setNovelId } = useNovelIdData();
+  const [fadeOut, setFadeOut] = useState(false); // 배경 애니메이션 fade 상태
+  const [currentBg, setCurrentBg] = useState(bgImgOne);
+  const { step } = useConvertStep();
 
   const handleScroll = (newScrollTop: number) => {
     setScrollTop(newScrollTop);
-  };
-
-  const NovelSaveMutate = useMutation({
-    mutationKey: mutationKeys.mutateSaveNovel,
-    mutationFn: () => saveNovel(title, text),
-    onSuccess: (result) => {
-      // 추후에 toast 추가
-      setNovelId(result.result.novelId); // 소설 id 저장
-    },
-    onError: () => {
-      console.log('update failure.');
-    },
-    onSettled: () => {
-      console.log('call NovelSaveMutate API');
-    },
-  });
-
-  // 소설 저장 함수
-  const handleSaveNovel = async () => {
-    // func: 소설 저장
-    NovelSaveMutate.mutate();
   };
 
   // 인디케이터 이동
@@ -74,74 +57,104 @@ const ConvertPage = () => {
     useMoveScroll('통계'),
   ];
 
+  // 뒤로가기, 새로고침 이벤트 처리
+  useEffect(() => {
+    const preventGoBack = (event: Event) => {
+      event.preventDefault();
+      console.log('엥?');
+      setModalIsOpen(true);
+    };
+
+    const preventLoad = (event: Event) => {
+      event.preventDefault();
+    };
+    console.log('omg');
+    window.history.pushState(null, '', window.location.href);
+
+    window.addEventListener('popstate', preventGoBack); // 뒤로가기 event
+    window.addEventListener('beforeunload', preventLoad); // 새로고침 event
+
+    return () => {
+      window.removeEventListener('popstate', preventGoBack);
+      window.removeEventListener('beforeunload', preventLoad);
+    };
+  }, []);
+
   const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
 
+  // background
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (step[2]) {
+        setFadeOut(true);
+        setCurrentBg(bgImgThree);
+        setFadeOut(false);
+      } else if (step[1]) {
+        setFadeOut(true);
+        setCurrentBg(bgImgTwo);
+        setFadeOut(false);
+      } else if (step[0]) {
+        setFadeOut(true);
+        setCurrentBg(bgImgOne);
+        setFadeOut(false);
+      }
+    }, 1000); // move animation을 고려하여 시간 설정
+
+    return () => clearTimeout(timer);
+  }, [step]);
+
   return (
-    <Background>
+    <Background fade={fadeOut} bgImg={currentBg}>
       <BackgroundCover>
-        <ConvertStepProvider>
-          <TopContainer>
-            <TitleInputBox>
-              <TitleInput
-                value={title}
-                onChange={handleTextChange}
-                placeholder="제목을 입력해주세요.(n0자)"
-              />
-            </TitleInputBox>
-            <IndicatorBox>
-              <ConvertIndicator
-                step={step}
-                select={select}
-                setSelect={setSelect}
-                stepTabs={stepTabs}
-              />
-              <div style={{ width: '2rem' }} />
-              <SaveButtonBox>
-                <SaveButton onClick={handleSaveNovel}>
-                  <SaveFileIcon width={25} />
-                  저장
-                </SaveButton>
-              </SaveButtonBox>
-            </IndicatorBox>
-          </TopContainer>
-          {/* components */}
-          <AnimationProvider>
-            <ConvertStepWrapper>
-              <NovelBox
-                ref={stepTabs[0].element}
-                data=""
-                onScroll={handleScroll}
-                scrollTop={scrollTop}
-              />
-              <CharacterBox
-                onScroll={handleScroll}
-                scrollTop={scrollTop}
-                setSelect={setSelect}
-                onMoveScroll={stepTabs[1].onMoveElement}
-              />
-              <ScriptBox
-                ref={stepTabs[1].element}
-                data={temp[1]}
-                temp={temp}
-                setTemp={setTemp}
-                setSelect={setSelect}
-                onMoveScroll={stepTabs[2].onMoveElement}
-              />
-              <StoryboardBox
-                ref={stepTabs[2].element}
-                data={temp[2]}
-                temp={temp}
-                setTemp={setTemp}
-                setSelect={setSelect}
-                onMoveScroll={stepTabs[3].onMoveElement}
-              />
-              <StatisticsBox ref={stepTabs[3].element} data="" />
-            </ConvertStepWrapper>
-          </AnimationProvider>
-        </ConvertStepProvider>
+        <TopContainer>
+          <TitleInputBox>
+            <TitleInput
+              value={title}
+              onChange={handleTextChange}
+              placeholder="제목을 입력해주세요.(n0자)"
+            />
+          </TitleInputBox>
+          <IndicatorBox>
+            <ConvertIndicator
+              select={select}
+              setSelect={setSelect}
+              stepTabs={stepTabs}
+            />
+          </IndicatorBox>
+        </TopContainer>
+        {/* components */}
+        <AnimationProvider>
+          <ConvertStepWrapper>
+            <NovelBox
+              ref={stepTabs[0].element}
+              data=""
+              onScroll={handleScroll}
+              scrollTop={scrollTop}
+            />
+            <CharacterBox
+              onScroll={handleScroll}
+              scrollTop={scrollTop}
+              setSelect={setSelect}
+              onMoveScroll={stepTabs[1].onMoveElement}
+            />
+            <ScriptBox
+              ref={stepTabs[1].element}
+              setSelect={setSelect}
+              onMoveScroll={stepTabs[2].onMoveElement}
+            />
+            <StoryboardBox
+              ref={stepTabs[2].element}
+              setSelect={setSelect}
+              onMoveScroll={stepTabs[3].onMoveElement}
+            />
+            <StatisticsBox ref={stepTabs[3].element} data="" />
+          </ConvertStepWrapper>
+        </AnimationProvider>
         <ChatbotBox />
+        {/* pop page modal */}
+        <PopPageModal isOpen={isOpen} setModalIsOpen={setModalIsOpen} />
       </BackgroundCover>
     </Background>
   );
@@ -149,12 +162,26 @@ const ConvertPage = () => {
 
 export default ConvertPage;
 
+// keyframes
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
 // background
-const Background = styled.div`
+const Background = styled.div<bgProps>`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-image: url(${bgImg});
+  ${({ fade, bgImg }) => css`
+    animation: ${fade && fadeIn} 1s forwards;
+    background-image: url(${bgImg});
+  `}
+  transition: 1s ease-in-out;
   background-size: cover;
   ${css`
     height: calc(100vh - 80px);
@@ -163,15 +190,18 @@ const Background = styled.div`
 
 const BackgroundCover = styled.div`
   display: flex;
-  flex-direction: column;
   flex: 1;
   background-color: rgba(166, 162, 154, 0.4);
   backdrop-filter: blur(3px);
-  padding: 0 6.5vw;
+  padding: 0 13rem;
   ${css`
     height: calc(100vh - 80px);
   `}
   overflow: hidden;
+
+  @media ${({ theme }) => theme.mediaSize.xl} {
+    padding: 0 15rem;
+  }
 `;
 
 // container
