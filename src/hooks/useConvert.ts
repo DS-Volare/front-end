@@ -185,7 +185,6 @@ export const useConvert = () => {
     }
   };
 
-
   // api: user convert list
   const convertList = async (page: number) => {
     try {
@@ -199,6 +198,7 @@ export const useConvert = () => {
     } catch (err) {
       console.log(err);
     }
+  };
 
   // clear context data
   const clearConvertData = () => {
