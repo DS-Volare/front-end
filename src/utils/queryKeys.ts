@@ -4,6 +4,7 @@ export const queryKeys = {
   appearance: ['appearance-rate'],
   userinfo: ['user-info'],
   statistics: ['statistics'],
+  list: 'convert-list',
 };
 
 export const mutationKeys = {

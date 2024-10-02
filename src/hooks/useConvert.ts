@@ -185,6 +185,21 @@ export const useConvert = () => {
     }
   };
 
+
+  // api: user convert list
+  const convertList = async (page: number) => {
+    try {
+      const result = await axiosInstance.get(`/spring/novels?pageNo=${page}`);
+      const data = result.data;
+      if (data.isSuccess) {
+        return data;
+      } else {
+        console.log(data.message);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+
   // clear context data
   const clearConvertData = () => {
     setText('');
@@ -205,6 +220,7 @@ export const useConvert = () => {
     getChatList,
     apperanceRate,
     convertStatistics,
+    convertList,
     clearConvertData,
   };
 };
