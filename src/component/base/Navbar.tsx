@@ -60,7 +60,6 @@ const NavBar = () => {
       <div style={{ flex: 1 }} />
       {!isLogin ? (
         <>
-          <Text>회원가입</Text>
           <Text onClick={openModalFunc}>로그인</Text>
         </>
       ) : (

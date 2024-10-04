@@ -1,5 +1,5 @@
 import FooterBar from '../component/base/Footerbar';
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import bgImgFirst from '../assets/background/bg-2.png';
 import bgImgSecond from '../assets/background/bg-3.png';
 import bgImgThird from '../assets/background/bg-4.png';
@@ -13,15 +13,27 @@ import {
   usePageContext,
 } from '../context/mainAnimationContext';
 import { useScreenTransitionAnimation } from '../hooks/useScreenTransitionAnimation';
+import { useEffect } from 'react';
+import { useTransitionBg } from '../hooks/useTransitionBg';
 
 type pageProps = {
   page: number;
+};
+
+type bgImageProps = {
+  bgImage: string;
 };
 
 const MainPage = () => {
   const { page } = usePageContext();
   const { controlScreen } = useMainAnimationContext(); // 애니메이션을 적용할 컨트롤러 context
   const { transitionWheelAnimation } = useScreenTransitionAnimation();
+
+  const transBgArr = [
+    useTransitionBg(1),
+    useTransitionBg(2),
+    useTransitionBg(3),
+  ];
 
   const pageTransitionFunc = () => {
     switch (page) {
@@ -34,22 +46,27 @@ const MainPage = () => {
     }
   };
 
+  useEffect(() => {
+    transBgArr[page - 1].onTransitionBackground();
+  }, [page]);
+
   return (
     <>
       <Background onWheel={transitionWheelAnimation}>
-        <BackgroundImage page={page}>
-          <BackgroundCover page={page}>
-            <LayoutWrapper>
-              {/* main content box */}
-              <IntroduceContainer animate={controlScreen}>
-                {pageTransitionFunc()}
-              </IntroduceContainer>
-              {/* indicator */}
-              <div style={{ flex: 1 }} />
-              <MainIndicator />
-            </LayoutWrapper>
-          </BackgroundCover>
-        </BackgroundImage>
+        <BackgroundImage bgImage={bgImgFirst} ref={transBgArr[0].element} />
+        <BackgroundImage bgImage={bgImgSecond} ref={transBgArr[1].element} />
+        <BackgroundImage bgImage={bgImgThird} ref={transBgArr[2].element} />
+        <BackgroundCover page={page}>
+          <LayoutWrapper>
+            {/* main content box */}
+            <IntroduceContainer animate={controlScreen}>
+              {pageTransitionFunc()}
+            </IntroduceContainer>
+            {/* indicator */}
+            <div style={{ flex: 1 }} />
+            <MainIndicator />
+          </LayoutWrapper>
+        </BackgroundCover>
       </Background>
       <FooterBar />
     </>
@@ -81,41 +98,33 @@ const IntroduceContainer = styled(motion.div)`
 
 // background
 const Background = styled.div`
-  display: flex;
   flex-direction: column;
   justify-content: center;
-
+  overflow: hidden;
   ${css`
     height: calc(100vh - 160px);
   `}
 `;
 
-const BackgroundImage = styled.div<pageProps>`
-  display: flex;
-  flex: 1;
+const BackgroundImage = styled.div<bgImageProps>`
+  width: 100%;
+  height: calc(100vh - 160px);
   background-size: cover;
-  ${({ page }) => {
-    switch (page) {
-      case 1:
-        return css`
-          background-image: url(${bgImgFirst});
-        `;
-      case 2:
-        return css`
-          background-image: url(${bgImgSecond});
-        `;
-      case 3:
-        return css`
-          background-image: url(${bgImgThird});
-        `;
-    }
-  }}
+
+  ${({ bgImage }) => css`
+    background-image: url(${bgImage});
+  `}
 `;
 
 const BackgroundCover = styled.div<pageProps>`
-  display: flex;
-  flex: 1;
   backdrop-filter: blur(3px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 5rem 0;
+
   ${({ page }) => {
     switch (page) {
       case 1:

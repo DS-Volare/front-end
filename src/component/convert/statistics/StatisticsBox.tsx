@@ -38,7 +38,11 @@ const StatisticsBox = forwardRef<HTMLDivElement, props>(({ data }, ref) => {
   });
 
   return (
-    <motion.div ref={ref} animate={controlStatistics} style={{ opacity: 0 }}>
+    <motion.div
+      ref={ref}
+      animate={controlStatistics}
+      style={{ display: 'none', opacity: 0 }}
+    >
       <GlassBox hasData={true}>
         <TitleText>통계</TitleText>
         <ContentBox style={{ overflowY: 'scroll' }}>

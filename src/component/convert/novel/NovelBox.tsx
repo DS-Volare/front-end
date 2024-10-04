@@ -40,6 +40,9 @@ const NovelBox = forwardRef<HTMLDivElement, props>(
           const result = e.target?.result;
           if (result && typeof result === 'string') {
             setText(result);
+            // step 값 update
+            step[0] = true;
+            setStep([...step]);
           }
         };
         reader.readAsText(file);

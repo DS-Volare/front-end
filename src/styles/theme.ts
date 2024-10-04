@@ -14,7 +14,7 @@ const colors = {
   /* 아래 부분을 비워둔 이유는 타입때문 ( "<ThemeProvider>"에서 조건에 따라 다르게 값을 채움 ) */
   color: '',
   bgColor: '',
-  gray: '',
+  gray: '#D9D9D9',
 };
 
 // 검정 배경
