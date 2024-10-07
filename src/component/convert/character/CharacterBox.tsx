@@ -67,27 +67,6 @@ const CharacterBox = ({
   const renderWords = () => {
     return inputSentences.map((sentence, sentIndex) =>
       sentence.map((word, eid) => {
-        const highlightInfo = resultData.find((dataGroup) =>
-          dataGroup.some(
-            (data) =>
-              data.sent_id === sentIndex &&
-              data.start_eid <= eid &&
-              data.end_eid >= eid
-          )
-        );
-
-        if (!highlightInfo) {
-          return (
-            <HighlightedWord
-              key={`${sentIndex}-${eid}`}
-              highlightColor="transparent"
-            >
-              {word}&nbsp;
-            </HighlightedWord>
-          );
-        }
-
-        // highlightInfo가 포함된 groupIndex 찾기
         const groupIndex = resultData.findIndex((dataGroup) =>
           dataGroup.some(
             (data) =>
@@ -96,16 +75,10 @@ const CharacterBox = ({
               data.end_eid >= eid
           )
         );
-
-        // groupIndex에 따라 색상 설정
-        const highlightColor = getHighlightColor(groupIndex);
-
+        const highlightColor = groupIndex === -1 ? "transparent" : highlightColors[groupIndex];
         return (
           <>
-            <HighlightedWord
-              key={`${sentIndex}-${eid}`}
-              highlightColor={highlightColor}
-            >
+            <HighlightedWord key={`${sentIndex}-${eid}`} highlightColor={highlightColor}>
               {word}
             </HighlightedWord>
             &nbsp;
@@ -114,17 +87,20 @@ const CharacterBox = ({
       })
     );
   };
+  
+  // 등장인물 형광펜 색상 리스트
+  const [highlightColors, setHighlightColors] = useState<string[]>(['#F0E393', '#BED2C7', '#EBB57D', '#A8C2EB', '#EB8E43']);
+  
+  useEffect(() => {
+    setHighlightColors([...highlightColors, generateRandomColor()])
+  }, [resultData]);
 
-  // groupIndex에 따라 색상 반환 함수
-  const getHighlightColor = (groupIndex: number): string => {
-    const colors = ['yellow', 'orange', 'lightgreen', 'lightblue']; // 원하는 색상 추가 가능
-
-    // groupIndex가 colors 배열의 길이를 넘어가면 추가 색상은 랜덤하게 반환하도록 설정
-    if (groupIndex >= colors.length) {
-      return `#${Math.floor(Math.random() * 16777215).toString(16)}`; // 랜덤 색상 생성
-    }
-
-    return colors[groupIndex];
+  // 파스텔 톤의 랜덤 색상 생성 함수
+  const generateRandomColor = (): string => {
+    const r = Math.floor(Math.random() * 80 + 160);
+    const g = Math.floor(Math.random() * 80 + 160);
+    const b = Math.floor(Math.random() * 80 + 160);
+    return `rgb(${r}, ${g}, ${b})`;
   };
 
   // NovelBox와 동시 스크롤

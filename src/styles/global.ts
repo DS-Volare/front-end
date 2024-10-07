@@ -50,4 +50,25 @@ export const GlobalStyle = createGlobalStyle`
           outline: none;
       }
   }
+  ::-webkit-scrollbar {
+    width: 12px; 
+    height: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: hsl(0, 0%, 90%);
+    border-radius: 20px;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(0, 0%, 80%);
+    background-clip: padding-box;
+    border: 2px solid transparent;
+  }
 `;

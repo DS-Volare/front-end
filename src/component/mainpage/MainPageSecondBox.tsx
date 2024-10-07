@@ -119,17 +119,6 @@ const TextBox = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
 
-  // scrollbar
-  &::-webkit-scrollbar {
-    width: 0.8rem;
-    height: 0.4rem;
-    border-radius: 0.5rem;
-    background: rgba(255, 255, 255, 0.4);
-  }
-  &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.olive};
-    border-radius: 0.8rem;
-  }
   line-height: 1.5;
 `;
 
