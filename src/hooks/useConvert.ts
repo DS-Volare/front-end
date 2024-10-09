@@ -188,7 +188,25 @@ export const useConvert = () => {
   // api: user convert list
   const convertList = async (page: number) => {
     try {
-      const result = await axiosInstance.get(`/spring/novels?pageNo=${page}`);
+      const result = await axiosInstance.get(
+        `/spring/users/conversion?pageNo=${page}`
+      );
+      const data = result.data;
+      if (data.isSuccess) {
+        return data;
+      } else {
+        console.log(data.message);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const convertDetail = async (novelId: string) => {
+    try {
+      const result = await axiosInstance.get(
+        `/spring/users/conversion-details/${novelId}`
+      );
       const data = result.data;
       if (data.isSuccess) {
         return data;
@@ -221,6 +239,7 @@ export const useConvert = () => {
     apperanceRate,
     convertStatistics,
     convertList,
+    convertDetail,
     clearConvertData,
   };
 };
