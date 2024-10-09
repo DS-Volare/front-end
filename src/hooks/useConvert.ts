@@ -12,6 +12,7 @@ import {
 import { Script } from '../types';
 import { useAuth } from './useAuth';
 import { useAxiosInstances } from './useAxiosInstance';
+import { useConvertStep } from '../context/convertStepContext';
 
 export const useConvert = () => {
   const { getTokenUser } = useUser();
@@ -23,6 +24,7 @@ export const useConvert = () => {
   const { setTitle } = useNovelTitleData();
   const { setScript } = useScriptData();
   const { setScriptId } = useScriptIdData();
+  const { setStep } = useConvertStep();
 
   // axios instance 선언
   const { createAxiosInstance } = useAxiosInstances();
@@ -227,6 +229,7 @@ export const useConvert = () => {
     setStoryboard({ scene: [] });
     setScriptId(0);
     setNovelId('');
+    setStep([false, false, false, false]);
   };
 
   return {
