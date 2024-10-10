@@ -21,7 +21,7 @@ type UseMoveScrollReturn = {
 type boxProps = {
   selected: number;
   index: number;
-  step: boolean;
+  $step: boolean;
 };
 
 const ConvertIndicator = ({ select, setSelect, stepTabs }: IndicatorProps) => {
@@ -33,7 +33,7 @@ const ConvertIndicator = ({ select, setSelect, stepTabs }: IndicatorProps) => {
         return (
           <IndicatorBox
             disabled={step[index]}
-            step={step[index]}
+            $step={step[index]}
             key={index}
             selected={select}
             index={index}
@@ -71,8 +71,8 @@ const IndicatorBox = styled.button.attrs((props) => ({
   color: ${({ theme }) => theme.colors.brown};
   font-weight: bold;
 
-  ${({ selected, index, step, theme }) => css`
-    ${step &&
+  ${({ selected, index, $step, theme }) => css`
+    ${$step &&
     css`
       background-color: ${theme.colors.orange};
       color: white;
