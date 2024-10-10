@@ -94,7 +94,7 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
         style={{ display: 'none', opacity: 0 }}
       >
         {isClick ? (
-          <GlassBox hasData={true}>
+          <GlassBox $hasData={true}>
             {!ScriptMutate.isPending ? (
               <>
                 {ScriptMutate.isSuccess && (
@@ -118,7 +118,7 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
             )}
           </GlassBox>
         ) : (
-          <GlassBox hasData={false}>
+          <GlassBox $hasData={false}>
             <TutorialBox>
               <TutorialTitle>#2 소설을 대본으로 변환하기</TutorialTitle>
               <TutorialText>
@@ -129,7 +129,7 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
                 <HighlightedText>대본 형식으로 변환</HighlightedText>합니다.
               </TutorialText>
             </TutorialBox>
-            <ConvertButton disabled={true} onClick={handleClick} isWrite={true}>
+            <ConvertButton disabled={true} onClick={handleClick} $isWrite={true}>
               대본 변환
             </ConvertButton>
           </GlassBox>

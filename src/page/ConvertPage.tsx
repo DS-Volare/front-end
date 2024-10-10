@@ -32,8 +32,8 @@ interface TextProps {
 }
 
 type bgProps = {
-  bgImg: string;
-  fade: boolean;
+  $bgImg: string;
+  $fade: boolean;
 };
 
 const ConvertPage = () => {
@@ -64,7 +64,6 @@ const ConvertPage = () => {
   useEffect(() => {
     const preventGoBack = (event: Event) => {
       event.preventDefault();
-      console.log('엥?');
       setModalIsOpen(true);
     };
 
@@ -77,7 +76,6 @@ const ConvertPage = () => {
     const preventLoad = (event: Event) => {
       event.preventDefault();
     };
-    console.log('omg');
     window.history.pushState(null, '', window.location.href);
 
     window.addEventListener('popstate', preventGoBack); // 뒤로가기 event
@@ -115,7 +113,7 @@ const ConvertPage = () => {
   }, [step]);
 
   return (
-    <Background fade={fadeOut} bgImg={currentBg}>
+    <Background $fade={fadeOut} $bgImg={currentBg}>
       <BackgroundCover>
         <TopContainer>
           <TitleInputBox>
@@ -186,9 +184,9 @@ const Background = styled.div<bgProps>`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  ${({ fade, bgImg }) => css`
-    animation: ${fade && fadeIn} 1s forwards;
-    background-image: url(${bgImg});
+  ${({ $fade, $bgImg }) => css`
+    animation: ${$fade && fadeIn} 1s forwards;
+    background-image: url(${$bgImg});
   `}
   transition: 1s ease-in-out;
   background-size: cover;

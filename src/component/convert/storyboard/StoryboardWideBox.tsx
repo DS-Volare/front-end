@@ -40,7 +40,7 @@ const StoryboardWideBox = forwardRef<HTMLDivElement>(
 
     return (
       <motion.div ref={ref} animate={controlStoryboard} style={{ opacity: 100 }}>
-          <GlassBox hasData={true}>
+          <GlassBox $hasData={true}>
                     <TitleText>스토리보드</TitleText>
                     <FileButton>
                       <FileDownloadIcon width="2rem" height="2rem" />

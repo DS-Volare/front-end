@@ -43,7 +43,7 @@ const StatisticsBox = forwardRef<HTMLDivElement, props>(({ data }, ref) => {
       animate={controlStatistics}
       style={{ display: 'none', opacity: 0 }}
     >
-      <GlassBox hasData={true}>
+      <GlassBox $hasData={true}>
         <TitleText>통계</TitleText>
         <ContentBox style={{ overflowY: 'scroll' }}>
           {!appearanceQuery.isFetching &&

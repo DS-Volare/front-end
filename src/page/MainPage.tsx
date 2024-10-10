@@ -17,11 +17,11 @@ import { useEffect } from 'react';
 import { useTransitionBg } from '../hooks/useTransitionBg';
 
 type pageProps = {
-  page: number;
+  $page: number;
 };
 
 type bgImageProps = {
-  bgImage: string;
+  $bgImage: string;
 };
 
 const MainPage = () => {
@@ -53,10 +53,10 @@ const MainPage = () => {
   return (
     <>
       <Background onWheel={transitionWheelAnimation}>
-        <BackgroundImage bgImage={bgImgFirst} ref={transBgArr[0].element} />
-        <BackgroundImage bgImage={bgImgSecond} ref={transBgArr[1].element} />
-        <BackgroundImage bgImage={bgImgThird} ref={transBgArr[2].element} />
-        <BackgroundCover page={page}>
+        <BackgroundImage $bgImage={bgImgFirst} ref={transBgArr[0].element} />
+        <BackgroundImage $bgImage={bgImgSecond} ref={transBgArr[1].element} />
+        <BackgroundImage $bgImage={bgImgThird} ref={transBgArr[2].element} />
+        <BackgroundCover $page={page}>
           <LayoutWrapper>
             {/* main content box */}
             <IntroduceContainer animate={controlScreen}>
@@ -111,8 +111,8 @@ const BackgroundImage = styled.div<bgImageProps>`
   height: calc(100vh - 160px);
   background-size: cover;
 
-  ${({ bgImage }) => css`
-    background-image: url(${bgImage});
+  ${({ $bgImage }) => css`
+    background-image: url(${$bgImage});
   `}
 `;
 
@@ -125,8 +125,8 @@ const BackgroundCover = styled.div<pageProps>`
   bottom: 0;
   margin: 5rem 0;
 
-  ${({ page }) => {
-    switch (page) {
+  ${({ $page }) => {
+    switch ($page) {
       case 1:
         return css`
           background-color: rgba(79, 73, 61, 0.6);

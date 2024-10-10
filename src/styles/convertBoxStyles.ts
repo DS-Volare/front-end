@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
 
-type buttonProps = { isWrite: boolean };
+type buttonProps = { $isWrite: boolean };
 
-export const GlassBox = styled.div<{ hasData: boolean }>`
+export const GlassBox = styled.div<{ $hasData: boolean }>`
   min-width: 41rem;
   height: 45rem;
   background: rgba(255, 252, 245, 0.4);
@@ -13,8 +13,8 @@ export const GlassBox = styled.div<{ hasData: boolean }>`
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   // 데이터가 없는 경우 튜토리얼
-  ${({ hasData }) =>
-    !hasData &&
+  ${({ $hasData }) =>
+    !$hasData &&
     css`
       display: flex;
       flex-direction: column;
@@ -105,18 +105,19 @@ export const ConvertButton = styled.button.attrs((props) => ({
   border: none;
   border-radius: 3rem;
   padding: 1rem 3rem;
-  cursor: pointer;
+  cursor: default;
   font-size: 1.25rem;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
 
-  ${({ isWrite }) =>
-    isWrite &&
+  ${({ $isWrite }) =>
+    $isWrite &&
     css`
       background: linear-gradient(
         90deg,
         ${({ theme }) => theme.colors.orange},
         #84411d
       );
+      cursor: pointer;
     `}
 `;
 

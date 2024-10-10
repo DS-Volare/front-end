@@ -83,7 +83,7 @@ const NovelBox = forwardRef<HTMLDivElement, props>(
 
     return (
       <div ref={ref}>
-        <GlassBox hasData={true}>
+        <GlassBox $hasData={true}>
           <TitleText>원고 작성</TitleText>
           <FileButton onClick={handleButtonClick}>
             <FileUploadIcon width="2rem" height="2rem" />

@@ -183,7 +183,7 @@ const CharacterBox = ({
     <motion.div>
       {isClick ? (
         // temporary
-        <GlassBox hasData={true}>
+        <GlassBox $hasData={true}>
           {!CharacterMutate.isPending ? (
             <>
               {CharacterMutate.isSuccess && (
@@ -205,7 +205,7 @@ const CharacterBox = ({
           )}
         </GlassBox>
       ) : (
-        <GlassBox hasData={false}>
+        <GlassBox $hasData={false}>
           <TutorialBox>
             <TutorialTitle>#1 소설 원고 입력하기</TutorialTitle>
             <TutorialText>
@@ -221,7 +221,7 @@ const CharacterBox = ({
           <ConvertButton
             disabled={step[0]}
             onClick={handleClick}
-            isWrite={step[0]}
+            $isWrite={step[0]}
           >
             등장인물 인식
           </ConvertButton>
