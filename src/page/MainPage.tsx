@@ -21,7 +21,7 @@ type pageProps = {
 };
 
 type bgImageProps = {
-  bgImage: string;
+  $bgImage: string;
 };
 
 const MainPage = () => {
@@ -53,9 +53,9 @@ const MainPage = () => {
   return (
     <>
       <Background onWheel={transitionWheelAnimation}>
-        <BackgroundImage bgImage={bgImgFirst} ref={transBgArr[0].element} />
-        <BackgroundImage bgImage={bgImgSecond} ref={transBgArr[1].element} />
-        <BackgroundImage bgImage={bgImgThird} ref={transBgArr[2].element} />
+        <BackgroundImage $bgImage={bgImgFirst} ref={transBgArr[0].element} />
+        <BackgroundImage $bgImage={bgImgSecond} ref={transBgArr[1].element} />
+        <BackgroundImage $bgImage={bgImgThird} ref={transBgArr[2].element} />
         <BackgroundCover page={page}>
           <LayoutWrapper>
             {/* main content box */}
@@ -111,8 +111,8 @@ const BackgroundImage = styled.div<bgImageProps>`
   height: calc(100vh - 160px);
   background-size: cover;
 
-  ${({ bgImage }) => css`
-    background-image: url(${bgImage});
+  ${({ $bgImage }) => css`
+    background-image: url(${$bgImage});
   `}
 `;
 

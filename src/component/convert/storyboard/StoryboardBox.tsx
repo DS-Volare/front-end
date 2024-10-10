@@ -90,7 +90,7 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
         style={{ display: 'none', opacity: 0 }}
       >
         {isClick ? (
-          <GlassBox hasData={true}>
+          <GlassBox $hasData={true}>
             {!StoryboardMutate.isPending ? (
               <>
                 {StoryboardMutate.isSuccess && (
@@ -126,7 +126,7 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
             )}
           </GlassBox>
         ) : (
-          <GlassBox hasData={false}>
+          <GlassBox $hasData={false}>
             <TutorialBox>
               <TutorialTitle>#3 스토리보드 생성과 챗봇 기능</TutorialTitle>
               <TutorialText>
@@ -141,7 +141,7 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
             <ConvertButton
               disabled={step[1]}
               onClick={handleClick}
-              isWrite={step[1]}
+              $isWrite={step[1]}
             >
               스토리보드 변환
             </ConvertButton>

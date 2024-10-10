@@ -38,7 +38,7 @@ export const useAuth = () => {
 
   const reissue = async () => {
     const { accessToken, refreshToken } = getTokenUser();
-    console.log('이거 호출은 됨?');
+    console.log('useAuth - reissue');
 
     try {
       const result = await axiosInstanceTwo.post(`/spring/users/reissue-token`);
