@@ -105,7 +105,7 @@ export const ConvertButton = styled.button.attrs((props) => ({
   border: none;
   border-radius: 3rem;
   padding: 1rem 3rem;
-  cursor: pointer;
+  cursor: default;
   font-size: 1.25rem;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
 
@@ -117,6 +117,7 @@ export const ConvertButton = styled.button.attrs((props) => ({
         ${({ theme }) => theme.colors.orange},
         #84411d
       );
+      cursor: pointer;
     `}
 `;
 

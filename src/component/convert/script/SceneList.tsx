@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
 import styled from 'styled-components';
 import SceneItem from './SceneItem';
-import { script1, script2 } from './scriptDummyData';
+// import { script1, script2 } from './scriptDummyData';
 import { useScriptData } from '../../../context/convertDataContext';
 
 const Container = styled.div`

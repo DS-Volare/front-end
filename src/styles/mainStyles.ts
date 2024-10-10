@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 interface textProps {
-  page: string;
+  $page: string;
 }
 
 // text
@@ -14,15 +14,15 @@ export const TitleText = styled.span`
 
 export const SubTitleText = styled.span<textProps>`
   font-weight: bold;
-  color: ${({ page, theme }) =>
-    page === 'first' ? 'white' : theme.colors.darkBrown};
-  font-size: ${({ page }) => (page === 'first' ? '1.5rem' : '1.2rem')};
+  color: ${({ $page, theme }) =>
+    $page === 'first' ? 'white' : theme.colors.darkBrown};
+  font-size: ${({ $page }) => ($page === 'first' ? '1.5rem' : '1.2rem')};
   line-height: 1.2;
 `;
 
 export const ContentText = styled.span<textProps>`
-  color: ${({ page, theme }) =>
-    page === 'first' ? 'white' : theme.colors.darkBrown};
+  color: ${({ $page, theme }) =>
+    $page === 'first' ? 'white' : theme.colors.darkBrown};
   font-size: 1rem;
   line-height: 1.2;
 `;
@@ -35,7 +35,7 @@ export const ExplainGridBox = styled.div<textProps>`
   justify-content: center;
 
   position: absolute;
-  bottom: ${({ page }) => (page === 'second' ? '5rem' : '11rem')};
+  bottom: ${({ $page }) => ($page === 'second' ? '5rem' : '11rem')};
   right: 7vw;
   width: 20vw;
   height: 20vh;

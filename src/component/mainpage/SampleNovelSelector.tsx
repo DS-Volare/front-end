@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 
 interface boxProps {
   selected: number;
-  index: number;
+  $index: number;
 }
 
 interface selectProps {
@@ -21,7 +21,7 @@ const SampleNovelSelector = ({ select, setSelect }: selectProps) => {
           <IndicatorBox
             key={index}
             selected={select}
-            index={index}
+            $index={index}
             onClick={() => setSelect(index)}
           >
             {item}
@@ -49,8 +49,8 @@ const IndicatorBox = styled.div<boxProps>`
   color: ${({ theme }) => theme.colors.darkBrown};
   padding: 0 1.2rem;
 
-  ${({ selected, index }) =>
-    selected === index &&
+  ${({ selected, $index }) =>
+    selected === $index &&
     css`
       background-color: ${({ theme }) => theme.colors.darkOrange};
       color: white;

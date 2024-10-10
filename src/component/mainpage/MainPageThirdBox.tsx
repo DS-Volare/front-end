@@ -35,20 +35,20 @@ const MainPageThirdBox = () => {
     return (
       <>
         <LoginModal isOpen={modalIsOpen} setModalIsOpen={setModalIsOpen} />
-        <SubTitleText page="second">
+        <SubTitleText $page="second">
           #2 스토리보드 생성과 챗봇 기능
         </SubTitleText>
         <div style={{ height: '1rem' }} />
-        <ContentText page="second">
+        <ContentText $page="second">
           1. 변환된 대본으로&nbsp;
-          <ContentText page="second" style={{ color: '#EA7333' }}>
+          <ContentText $page="second" style={{ color: '#EA7333' }}>
             스토리보드
           </ContentText>
           를 생성 <br />
         </ContentText>
-        <ContentText page="second">
+        <ContentText $page="second">
           2.&nbsp;
-          <ContentText page="second" style={{ color: '#EA7333' }}>
+          <ContentText $page="second" style={{ color: '#EA7333' }}>
             챗봇
           </ContentText>
           으로 대본 수정 및 각색 작업 진행
@@ -59,25 +59,25 @@ const MainPageThirdBox = () => {
 
   return (
     <LayoutWrapper>
-      <ContentText page={'third'}>
+      <ContentText $page={'third'}>
         변환된 대본을 기반으로 스토리보드 생성과 챗봇 기능을 제공합니다.
       </ContentText>
       <ExampleContainer>
         <ExampleBox>
           <ExampleImage style={{ backgroundImage: `url(${exampleOne})` }} />
-          <SubTitleText style={{ textAlign: 'right' }} page={'third'}>
+          <SubTitleText style={{ textAlign: 'right' }} $page={'third'}>
             스토리보드 예시 화면
           </SubTitleText>
           <div style={{ height: '3rem' }} />
         </ExampleBox>
         <ExampleBox>
           <div style={{ height: '3rem' }} />
-          <SubTitleText page={'third'}>챗봇과의 채팅 예시 화면</SubTitleText>
+          <SubTitleText $page={'third'}>챗봇과의 채팅 예시 화면</SubTitleText>
           <ExampleImage style={{ backgroundImage: `url(${exampleTwo})` }} />
         </ExampleBox>
         {/* example */}
       </ExampleContainer>
-      <ExplainGridBox page={'third'}>{explainContents()}</ExplainGridBox>
+      <ExplainGridBox $page={'third'}>{explainContents()}</ExplainGridBox>
       <ConvertButton onClick={moveToPage}>서비스 사용해보기!</ConvertButton>
     </LayoutWrapper>
   );

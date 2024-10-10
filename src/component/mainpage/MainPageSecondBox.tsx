@@ -45,19 +45,19 @@ const MainPageSecondBox = () => {
   const explainContents = () => {
     return (
       <>
-        <SubTitleText page="second">#1 소설을 대본으로 변환하기</SubTitleText>
+        <SubTitleText $page="second">#1 소설을 대본으로 변환하기</SubTitleText>
         <div style={{ height: '1rem' }} />
-        <ContentText page="second">
+        <ContentText $page="second">
           1. 4개의 소설 샘플 중 하나의 샘플을 선택합니다. <br />
         </ContentText>
-        <ContentText page="second">
+        <ContentText $page="second">
           2.&nbsp;
-          <ContentText page="second" style={{ color: '#EA7333' }}>
+          <ContentText $page="second" style={{ color: '#EA7333' }}>
             대본 변환 버튼
           </ContentText>
           을 누릅니다. <br />
         </ContentText>
-        <ContentText page="second">
+        <ContentText $page="second">
           3. 오른쪽 창에서 변환된 대본을 확인할 수 있습니다.
         </ContentText>
       </>
@@ -85,7 +85,7 @@ const MainPageSecondBox = () => {
           <div style={{ height: '2.5rem' }} />
         </SampleContainer>
         {/* explain */}
-        <ExplainGridBox page={'second'}>{explainContents()}</ExplainGridBox>
+        <ExplainGridBox $page={'second'}>{explainContents()}</ExplainGridBox>
       </>
     </LayoutWrapper>
   );
