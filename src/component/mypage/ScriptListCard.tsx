@@ -38,7 +38,7 @@ const ScriptListCard = ({
       <Image
         animate={control}
         src={
-          image == '로고url'
+          image == null
             ? require('../../assets/background/list-basic-image.png')
             : image
         }
