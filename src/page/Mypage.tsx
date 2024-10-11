@@ -15,6 +15,7 @@ interface ScriptListProps {
   updatedAt: string;
   title: string;
   image: string;
+  novelId: string;
 }
 
 const MyPage = () => {
@@ -58,6 +59,7 @@ const MyPage = () => {
           updatedAt={item.updatedAt}
           title={item.title}
           image={item.image}
+          novelId={item.novelId}
         />
       );
     });
@@ -92,7 +94,11 @@ const MyPage = () => {
                 <ItemsContainer>
                   {listQuery.isFetching && skeletonListFunc()}
                   {!listQuery.isFetching &&
-                    ScriptListfunc(listQuery.data.result.userConvertListDTO)}
+                  listQuery.data.result.userConvertListDTO.length != 0 ? (
+                    ScriptListfunc(listQuery.data.result.userConvertListDTO)
+                  ) : (
+                    <TitleText>아직 생성한 변환내용이 없어요.</TitleText>
+                  )}
                 </ItemsContainer>
                 <div style={{ flex: 1 }} />
                 <Pagenation

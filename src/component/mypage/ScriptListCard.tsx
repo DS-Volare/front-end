@@ -2,12 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 import { motion, AnimationControls } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 interface ScriptListProps {
   updatedAt: string;
   title: string;
   control: AnimationControls;
   image: string;
+  novelId: string;
 }
 
 const ScriptListCard = ({
@@ -15,6 +17,7 @@ const ScriptListCard = ({
   title,
   control,
   image,
+  novelId,
 }: ScriptListProps) => {
   const formatDate = (date: string) => {
     const dateobj = new Date(date);
@@ -24,12 +27,18 @@ const ScriptListCard = ({
     return `${year}-${month}-${day}`;
   };
 
+  // navigate
+  const navigate = useNavigate();
+
   return (
-    <CardBox animate={control}>
+    <CardBox
+      animate={control}
+      onClick={() => navigate('/convert', { state: { novelId } })}
+    >
       <Image
         animate={control}
         src={
-          image == '로고url'
+          image == null
             ? require('../../assets/background/list-basic-image.png')
             : image
         }

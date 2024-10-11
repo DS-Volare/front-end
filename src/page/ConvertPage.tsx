@@ -22,7 +22,7 @@ import {
 } from '../context/convertDataContext';
 import { useMutation } from '@tanstack/react-query';
 import { mutationKeys } from '../utils/queryKeys';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import PopPageModal from '../component/base/PopPageModal';
 
 interface TextProps {
@@ -44,6 +44,9 @@ const ConvertPage = () => {
   const [fadeOut, setFadeOut] = useState(false); // 배경 애니메이션 fade 상태
   const [currentBg, setCurrentBg] = useState(bgImgOne);
   const { step } = useConvertStep();
+  const { convertDetail } = useConvert();
+
+  const location = useLocation();
 
   const handleScroll = (newScrollTop: number) => {
     setScrollTop(newScrollTop);
@@ -63,6 +66,12 @@ const ConvertPage = () => {
       event.preventDefault();
       setModalIsOpen(true);
     };
+
+    // mypage -> convert page
+    if (location.state) {
+      // 상세페이지 호출
+      convertDetail(location.state.novelId);
+    }
 
     const preventLoad = (event: Event) => {
       event.preventDefault();

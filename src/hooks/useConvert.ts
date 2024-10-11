@@ -12,6 +12,7 @@ import {
 import { Script } from '../types';
 import { useAuth } from './useAuth';
 import { useAxiosInstances } from './useAxiosInstance';
+import { useConvertStep } from '../context/convertStepContext';
 
 export const useConvert = () => {
   const { getTokenUser } = useUser();
@@ -23,6 +24,7 @@ export const useConvert = () => {
   const { setTitle } = useNovelTitleData();
   const { setScript } = useScriptData();
   const { setScriptId } = useScriptIdData();
+  const { setStep } = useConvertStep();
 
   // axios instance 선언
   const { createAxiosInstance } = useAxiosInstances();
@@ -188,7 +190,25 @@ export const useConvert = () => {
   // api: user convert list
   const convertList = async (page: number) => {
     try {
-      const result = await axiosInstance.get(`/spring/novels?pageNo=${page}`);
+      const result = await axiosInstance.get(
+        `/spring/users/conversion?pageNo=${page}`
+      );
+      const data = result.data;
+      if (data.isSuccess) {
+        return data;
+      } else {
+        console.log(data.message);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const convertDetail = async (novelId: string) => {
+    try {
+      const result = await axiosInstance.get(
+        `/spring/users/conversion-details/${novelId}`
+      );
       const data = result.data;
       if (data.isSuccess) {
         return data;
@@ -209,6 +229,7 @@ export const useConvert = () => {
     setStoryboard({ scene: [] });
     setScriptId(0);
     setNovelId('');
+    setStep([false, false, false, false]);
   };
 
   return {
@@ -221,6 +242,7 @@ export const useConvert = () => {
     apperanceRate,
     convertStatistics,
     convertList,
+    convertDetail,
     clearConvertData,
   };
 };
