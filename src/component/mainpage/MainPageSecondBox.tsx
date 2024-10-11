@@ -10,16 +10,12 @@ import { ReactComponent as ArrowRightIcon } from '../../assets/icons/arrow_right
 import { useQuery } from '@tanstack/react-query';
 import { queryKeys } from '../../utils/queryKeys';
 import axios from 'axios';
+import { sample1, sample2, sample3, sample4 } from './demoDummy';
 
 const MainPageSecondBox = () => {
   const [select, setSelect] = useState<number>(0);
   const [isClick, setIsClick] = useState<boolean>(false);
-  const sampleNovel: string[] = [
-    '샘플내용1',
-    '샘플내용2',
-    '샘플내용3',
-    '샘플내용4',
-  ];
+  const sampleNovel: string[] = [sample1, sample2, sample3, sample4];
 
   useEffect(() => {
     setIsClick(false); // 결과 text 초기화
