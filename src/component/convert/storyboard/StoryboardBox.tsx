@@ -59,6 +59,9 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
         // 인디케이터 select 값 변경
         setSelect(3); // 통계로 이동
 
+        step[3] = true;
+        setStep([...step]);
+
         // 애니메이션
         onMoveScroll();
         setTimeout(() => {
