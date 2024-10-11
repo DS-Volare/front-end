@@ -69,11 +69,11 @@ const NovelBox = forwardRef<HTMLDivElement, props>(
     };
 
     // CharacterBox와 동시 스크롤
-    useEffect(() => {
-      if (textareaRef.current) {
-        textareaRef.current.scrollTop = scrollTop;
-      }
-    }, [scrollTop]);
+    // useEffect(() => {
+    //   if (textareaRef.current) {
+    //     textareaRef.current.scrollTop = scrollTop;
+    //   }
+    // }, [scrollTop]);
 
     const handleScroll = () => {
       if (textareaRef.current) {

@@ -111,11 +111,11 @@ const CharacterBox = ({
   };
 
   // NovelBox와 동시 스크롤
-  useEffect(() => {
-    if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTop = scrollTop;
-    }
-  }, [scrollTop]);
+  // useEffect(() => {
+  //   if (scrollAreaRef.current) {
+  //     scrollAreaRef.current.scrollTop = scrollTop;
+  //   }
+  // }, [scrollTop]);
 
   // fetch, 추후에 낙관적 업데이트를 위한 onMutate 함수 추가
   const CharacterMutate = useMutation({
