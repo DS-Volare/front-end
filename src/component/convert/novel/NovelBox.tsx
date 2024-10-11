@@ -28,7 +28,6 @@ const NovelBox = forwardRef<HTMLDivElement, props>(
     //const [text, setText] = useState<string>('');
     const { text, setText } = useNovelData();
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const textareaRef = useRef<HTMLTextAreaElement>(null);
     const { step, setStep } = useConvertStep(); // 변환 단계 관리
 
     // 파일 업로드
@@ -68,19 +67,6 @@ const NovelBox = forwardRef<HTMLDivElement, props>(
       }
     };
 
-    // CharacterBox와 동시 스크롤
-    // useEffect(() => {
-    //   if (textareaRef.current) {
-    //     textareaRef.current.scrollTop = scrollTop;
-    //   }
-    // }, [scrollTop]);
-
-    const handleScroll = () => {
-      if (textareaRef.current) {
-        onScroll(textareaRef.current.scrollTop);
-      }
-    };
-
     return (
       <div ref={ref}>
         <GlassBox $hasData={true}>
@@ -101,8 +87,6 @@ const NovelBox = forwardRef<HTMLDivElement, props>(
               onChange={handleTextChange}
               wrap="soft"
               placeholder="내용을 입력하거나 텍스트 파일을 첨부하세요."
-              ref={textareaRef}
-              onScroll={handleScroll}
             />
           </ContentBox>
         </GlassBox>

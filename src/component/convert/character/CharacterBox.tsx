@@ -55,7 +55,6 @@ const CharacterBox = ({
   const { setNovelId } = useNovelIdData();
 
   const { controlScripts, startAnimation } = useAnimationContext(); // 변환 컴포넌트 애니메이션 컨트롤
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { step, setStep } = useConvertStep(); // 변환 단계 관리
   const { saveNovel, cognizeCharacter } = useConvert();
   const [isClick, setIsClick] = useState<boolean>(false); // 버튼 클릭했을 시 true
@@ -110,13 +109,6 @@ const CharacterBox = ({
     return `rgb(${r}, ${g}, ${b})`;
   };
 
-  // NovelBox와 동시 스크롤
-  // useEffect(() => {
-  //   if (scrollAreaRef.current) {
-  //     scrollAreaRef.current.scrollTop = scrollTop;
-  //   }
-  // }, [scrollTop]);
-
   // fetch, 추후에 낙관적 업데이트를 위한 onMutate 함수 추가
   const CharacterMutate = useMutation({
     mutationKey: mutationKeys.mutateCharacterList,
@@ -166,12 +158,6 @@ const CharacterBox = ({
     },
   });
 
-  const handleScroll = () => {
-    if (scrollAreaRef.current) {
-      onScroll(scrollAreaRef.current.scrollTop);
-    }
-  };
-
   const handleClick = async () => {
     setIsClick(true); // 버튼 클릭했을 시 다음 단계가 보이도록
     // func: 소설 저장
@@ -197,9 +183,7 @@ const CharacterBox = ({
                 <>
                   <TitleText>등장인물 인식 결과</TitleText>
                   <ContentBox style={{ height: '27rem' }}>
-                    <ScrollText ref={scrollAreaRef} onScroll={handleScroll}>
-                      {renderWords()}
-                    </ScrollText>
+                    <ScrollText>{renderWords()}</ScrollText>
                   </ContentBox>
                   <TitleText>등장인물</TitleText>
                   <CharacterChipList />
