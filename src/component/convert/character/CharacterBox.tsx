@@ -75,24 +75,31 @@ const CharacterBox = ({
               data.end_eid >= eid
           )
         );
-        const highlightColor = groupIndex === -1 ? "transparent" : highlightColors[groupIndex];
+        const highlightColor =
+          groupIndex === -1 ? 'transparent' : highlightColors[groupIndex];
         return (
-          <>
-            <HighlightedWord key={`${sentIndex}-${eid}`} highlightColor={highlightColor}>
+          <React.Fragment key={`${sentIndex}-${eid}`}>
+            <HighlightedWord $highlightColor={highlightColor}>
               {word}
             </HighlightedWord>
             &nbsp;
-          </>
+          </React.Fragment>
         );
       })
     );
   };
-  
+
   // 등장인물 형광펜 색상 리스트
-  const [highlightColors, setHighlightColors] = useState<string[]>(['#F0E393', '#BED2C7', '#EBB57D', '#A8C2EB', '#EB8E43']);
-  
+  const [highlightColors, setHighlightColors] = useState<string[]>([
+    '#F0E393',
+    '#BED2C7',
+    '#EBB57D',
+    '#A8C2EB',
+    '#EB8E43',
+  ]);
+
   useEffect(() => {
-    setHighlightColors([...highlightColors, generateRandomColor()])
+    setHighlightColors([...highlightColors, generateRandomColor()]);
   }, [resultData]);
 
   // 파스텔 톤의 랜덤 색상 생성 함수
@@ -234,10 +241,10 @@ const CharacterBox = ({
 export default CharacterBox;
 
 interface HighlightedWordProps {
-  highlightColor: string;
+  $highlightColor: string;
 }
 
 const HighlightedWord = styled.p<HighlightedWordProps>`
   display: inline;
-  background-color: ${(props) => props.highlightColor};
+  background-color: ${(props) => props.$highlightColor};
 `;

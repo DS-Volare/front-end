@@ -103,7 +103,7 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
                     <ContentBox>
                       <ScrollText>
                         {storyboard.scene.map((s, index) => (
-                          <>
+                          <React.Fragment key={index}>
                             <StoryboardInfo
                               data={{
                                 scene_num: s.scene_num,
@@ -113,7 +113,7 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
                               }}
                             />
                             <CutList cuts={s.content!} />
-                          </>
+                          </React.Fragment>
                         ))}
                       </ScrollText>
                     </ContentBox>

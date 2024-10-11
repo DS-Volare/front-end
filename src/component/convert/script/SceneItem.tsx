@@ -76,7 +76,7 @@ const SceneItem = ({ scene, sceneIndex, onContentChange }: SceneItemProps) => {
               type="text"
               value={content.content || ''}
               onChange={(e) => handleInputChange(e, contentIndex, 'content')}
-              field="direction"
+              $field="direction"
             />
           ) : (
             <>
@@ -86,7 +86,7 @@ const SceneItem = ({ scene, sceneIndex, onContentChange }: SceneItemProps) => {
                 onChange={(e) =>
                   handleInputChange(e, contentIndex, 'character')
                 }
-                field="character"
+                $field="character"
               />
               <ActionDialogTextArea
                 ref={(el) => (actionDialogRef.current[contentIndex] = el)}
@@ -126,14 +126,14 @@ const ContentItem = styled.div`
   height: auto;
 `;
 
-const DirectionInput = styled.input<{ field: string }>`
+const DirectionInput = styled.input<{ $field: string }>`
   width: 90%;
   margin-left: auto;
   font-size: 1em;
   font-style: italic;
 `;
 
-const CharacterInput = styled.input<{ field: string }>`
+const CharacterInput = styled.input<{ $field: string }>`
   width: 5em;
   font-weight: bold;
   font-size: 1em;
