@@ -4,7 +4,7 @@ import { Message } from '../../../types';
 import ChatMessage from './ChatMessage';
 
 interface MessageListProps {
-  messages: Message[];
+  messages?: Message[];
   currentTypingId: string | null;
   onEndTyping: (id: string) => void;
 }
@@ -12,14 +12,15 @@ interface MessageListProps {
 const MessageList = React.forwardRef<HTMLDivElement, MessageListProps>(
   ({ messages, currentTypingId, onEndTyping }, ref) => (
     <MessageListContainer ref={ref}>
-      {messages.map((message, index) => (
-        <ChatMessage
-          key={index}
-          {...message}
-          onEndTyping={onEndTyping}
-          currentTypingId={currentTypingId}
-        />
-      ))}
+      {messages &&
+        messages.map((message, index) => (
+          <ChatMessage
+            key={index}
+            {...message}
+            onEndTyping={onEndTyping}
+            currentTypingId={currentTypingId}
+          />
+        ))}
     </MessageListContainer>
   )
 );
