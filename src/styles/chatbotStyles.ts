@@ -38,7 +38,7 @@ export const Title = styled.h1`
   padding: 20px;
   margin: 0;
   color: white;
-  height: 1.25rem;
+  height: 4rem;
 `;
 
 export const MessageListContainer = styled.div`

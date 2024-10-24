@@ -137,7 +137,6 @@ export const useConvert = () => {
   // (need fix) cursor-based-pagination
   const getChatList = async ({ queryKey, pageParam = '' }: QueryFunctionContext<string[], string>) => {
     const [, chatRoomId] = queryKey;
-    console.log("getChatList")
 
   try {
     const response = await axios.get(`/spring/chats/${chatRoomId}`, {

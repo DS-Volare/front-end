@@ -16,6 +16,7 @@ import { Toast } from '../../../styles/ToastStyle';
 import { toastText } from '../../../utils/toastText';
 import { queryKeys } from '../../../utils/queryKeys';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import Spinner from '../../base/Spinner';
 
 const ChatbotBox = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false); // drawer
@@ -29,7 +30,6 @@ const ChatbotBox = () => {
   const { scriptId, setScriptId } = useScriptIdData();
   setScriptId(14); // ★★★ 테스트용. 추후 삭제
   const [chatRoomId, setChatRoomId] = useState<string>('');
-  const [lastMessageId, setLastMessageId] = useState<string | undefined>(); // (무한스크롤) pageParam을 저장
 
   // 채팅 목록 무한스크롤: 커서 기반 페이징
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
@@ -54,7 +54,6 @@ const ChatbotBox = () => {
   };
 
   const startChatHandler = async () => {
-    console.log(scriptId);
     // ★★★ 테스트용. 주석 해제할 것
     // const result = await startNewChat(scriptId);
     // setChatRoomId(result.chatRoomId);
@@ -62,9 +61,7 @@ const ChatbotBox = () => {
   };
 
   // (stomp) connect & subscribe
-  const connectHandler = async (chatRoomId: string) => {
-    console.log(chatRoomId);
-
+  const connectHandler = useCallback(async (chatRoomId: string) => {
     client.current = Stomp.over(() => {
       const sock = new WebSocket(`ws://localhost:8080/websocket`);
       return sock;
@@ -97,7 +94,7 @@ const ChatbotBox = () => {
       }
     );
     return client;
-  };
+  }, []);
 
   // (stomp) disconnect
   const disconnectHandler = () => {
@@ -187,6 +184,8 @@ const ChatbotBox = () => {
     }
   };
 
+  const prevFetching = useRef(isFetchingNextPage); // 이전 상태 저장
+
   // 메시지 목록 업데이트
   // infiniteQuery에서 hasNext, hasPrevious 모두를 사용하지 않고 hasNext만 사용하기로 해서 이렇게 업데이트해야 함(잘못된 선택일까...)
   useEffect(() => {
@@ -202,14 +201,30 @@ const ChatbotBox = () => {
         });
 
       setMessages(messages);
-      setLastMessageId(messages[0]?.messageId);
-      console.log(lastMessageId);
     }
-  }, [isFetchingNextPage, data]);
+
+    const container = messageListRef.current;
+
+    if (!container) return;
+
+    // 데이터 로드 완료 시점 (isFetchingNextPage가 true -> false로 바뀔 때)
+    if (prevFetching.current && !isFetchingNextPage) {
+      // 스크롤 높이 차이 계산
+      const previousScrollHeight = container.scrollHeight;
+
+      // 데이터가 로드된 후에 스크롤 위치 보정
+      setTimeout(() => {
+        const newScrollHeight = container.scrollHeight;
+        const heightDifference = newScrollHeight - previousScrollHeight;
+        container.scrollTop += heightDifference;
+      }, 0); // 데이터가 렌더링된 후 보정
+    }
+    // 이전 상태 업데이트
+    prevFetching.current = isFetchingNextPage;
+  }, [isFetchingNextPage, data]); // isFetchingNextPage가 true->false일 때만 동작해도 됨
 
   useEffect(() => {
     const container = messageListRef.current;
-    scrollToBottom();
     if (container) {
       // 스크롤 이벤트 리스너 추가
       container.addEventListener('scroll', handleScroll);
@@ -218,7 +233,7 @@ const ChatbotBox = () => {
         container.removeEventListener('scroll', handleScroll);
       };
     }
-  }, [isDrawerOpen]); // 동작이 너무 빈번하게 일어나는지 검토 후 리팩토링 필요
+  }, [isDrawerOpen, isFetchingNextPage]);
 
   return (
     <>
@@ -232,7 +247,8 @@ const ChatbotBox = () => {
           >
             <ChatBox>
               <Title>Chat</Title>
-              {!isFetchingNextPage && data && (
+              {isFetchingNextPage && <Spinner text="" />}
+              {data && (
                 <MessageList
                   messages={messages}
                   currentTypingId={currentTypingId}
