@@ -28,10 +28,10 @@ const ChatbotBox = () => {
   const messageListRef = useRef<HTMLDivElement>(null); // 메시지 리스트 영역. 스크롤 조작을 위함
   const client = useRef<CompatClient>(); // 채팅 Stomp 클라이언트
   const { startNewChat, getChatList } = useConvert();
-
   const { scriptId, setScriptId } = useScriptIdData();
   setScriptId(14); // ★★★ 테스트용. 추후 삭제
   const [chatRoomId, setChatRoomId] = useState<string>('');
+  const [scrollHeight, setScrollHeight] = useState<number>(10);
 
   // 채팅 목록 무한스크롤: 커서 기반 페이징
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
@@ -205,10 +205,9 @@ const ChatbotBox = () => {
       setMessages(messages);
     }
 
+    // 스크롤 위치 복원
     const container = messageListRef.current;
-
     if (!container) return;
-
     // 데이터 로드 완료 시점 (isFetchingNextPage가 true -> false로 바뀔 때)
     if (prevFetching.current && !isFetchingNextPage) {
       // 스크롤 높이 차이 계산
@@ -230,6 +229,14 @@ const ChatbotBox = () => {
     if (container) {
       // 스크롤 이벤트 리스너 추가
       container.addEventListener('scroll', handleScroll);
+
+      // 스크롤 위치 복원
+      if (isDrawerOpen) {
+        container.scrollTop = scrollHeight;
+      } else {
+        setScrollHeight(container.scrollTop);
+      }
+
       return () => {
         // 컴포넌트 언마운트 시 이벤트 리스너 제거
         container.removeEventListener('scroll', handleScroll);
