@@ -9,7 +9,8 @@ export const ChatbotButton = styled(motion.button)`
   width: 4rem;
   height: 4rem;
   border-radius: 2rem;
-  background-color: ${({ theme }) => theme.colors.orange};
+  padding: 0;
+  background-color: ${({ theme }) => theme.colors.darkBrown};
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
@@ -43,7 +44,7 @@ export const Title = styled.h1`
 
 export const MessageListContainer = styled.div`
   width: 100%;
-  padding: 20px;
+  padding: 0 20px;
   flex-grow: 1;
   overflow-y: auto;
 `;

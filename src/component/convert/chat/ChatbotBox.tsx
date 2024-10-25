@@ -17,6 +17,8 @@ import { toastText } from '../../../utils/toastText';
 import { queryKeys } from '../../../utils/queryKeys';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import Spinner from '../../base/Spinner';
+import { ReactComponent as ChatbotIcon } from '../../../assets/icons/pencil_center.svg';
+import { ReactComponent as GoBackIcon } from '../../../assets/icons/go-back.svg';
 
 const ChatbotBox = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false); // drawer
@@ -276,7 +278,13 @@ const ChatbotBox = () => {
               connectHandler(chatRoomId);
             }
           }}
-        />
+        >
+          {isDrawerOpen ? (
+            <GoBackIcon height="1.5rem" />
+          ) : (
+            <ChatbotIcon width="4rem" height="4rem" />
+          )}
+        </ChatbotButton>
       )}
     </>
   );

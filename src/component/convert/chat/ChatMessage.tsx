@@ -1,13 +1,13 @@
 import { Message } from '../../../types';
 import { TypeAnimation } from 'react-type-animation';
 import {
-  ChatbotIcon,
   ChatbotMessage,
   ChatbotMessageDateTime,
   MessageContainer,
   UserMessage,
   UserMessageDateTime,
 } from '../../../styles/chatbotStyles';
+import { ReactComponent as ChatbotIcon } from '../../../assets/icons/pencil_icon.svg';
 
 interface ChatMessageProps extends Message {
   onEndTyping: (id: string) => void;
@@ -25,7 +25,7 @@ const ChatMessage = ({
 }: ChatMessageProps) => {
   return (
     <>
-      { (messageType === "QUESTION") ? (
+      {messageType === 'QUESTION' ? (
         <MessageContainer>
           <UserMessage>
             <p>{message}</p>
@@ -34,7 +34,7 @@ const ChatMessage = ({
         </MessageContainer>
       ) : (
         <MessageContainer>
-          <ChatbotIcon></ChatbotIcon>
+          <ChatbotIcon width="2rem" height="2rem" />
           <ChatbotMessage>
             {isTyping && messageId && currentTypingId === messageId ? (
               <TypeAnimation
