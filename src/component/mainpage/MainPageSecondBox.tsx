@@ -126,6 +126,9 @@ const ConvertButton = styled.div`
   width: 10rem;
   height: 2.5rem;
 
+  user-select: none;
+  cursor: pointer;
+
   background-color: ${({ theme }) => theme.colors.orange};
   color: white;
   font-weight: bold;

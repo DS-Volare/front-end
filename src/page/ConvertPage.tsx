@@ -120,7 +120,7 @@ const ConvertPage = () => {
             <TitleInput
               value={title}
               onChange={handleTextChange}
-              placeholder="제목을 입력해주세요.(n0자)"
+              placeholder="제목을 입력하세요."
             />
           </TitleInputBox>
           <IndicatorBox>
@@ -274,7 +274,8 @@ const TitleInput = styled.input`
   background-color: transparent;
   border-width: 0 0 1px 0;
   border-color: white;
-  font-family: BookkMyungjo;
+  border-style: solid;
+  font-size: 1rem;
   color: black;
   &::placeholder {
     color: ${({ theme }) => theme.colors.brown};

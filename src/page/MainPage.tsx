@@ -87,7 +87,7 @@ const IntroduceContainer = styled(motion.div)`
   justify-content: center;
   width: 70vw; // before 1450px;
   height: 70vh; // before 700px;
-  background-color: rgba(255, 255, 245, 0.6);
+  background-color: rgba(255, 255, 245, 0.5);
   padding: 3vh 3vw;
 
   border-style: solid;

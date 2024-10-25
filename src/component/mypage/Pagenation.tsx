@@ -89,6 +89,8 @@ const PageItem = styled.div<{ $active: boolean; $isPost: number }>`
   background-color: ${({ theme }) => theme.colors.ivory};
   color: ${({ theme }) => theme.colors.brown};
   transition: width 0.5s ease, height 0.5s ease;
+  user-select: none;
+  cursor: pointer;
 
   &:hover {
     width: 3.5rem;

@@ -49,6 +49,9 @@ const IndicatorBox = styled.div<boxProps>`
   color: ${({ theme }) => theme.colors.darkBrown};
   padding: 0 1.2rem;
 
+  user-select: none;
+  cursor: pointer;
+
   ${({ selected, $index }) =>
     selected === $index &&
     css`

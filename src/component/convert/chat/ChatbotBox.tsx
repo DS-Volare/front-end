@@ -277,6 +277,7 @@ const ChatbotBox = () => {
           variants={buttonVariants}
           transition={{ type: 'tween' }}
           whileTap={{ scale: 0.9 }}
+          whileHover={isDrawerOpen ? { scale: 0.9 } : { scale: 1.1 }}
           onClick={() => {
             setIsDrawerOpen(!isDrawerOpen);
             if (isDrawerOpen) {

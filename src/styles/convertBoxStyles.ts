@@ -37,6 +37,7 @@ export const TitleText = styled.div`
   color: white;
   font-size: 2rem;
   padding: 1rem;
+  user-select: none;
 `;
 
 export const ScrollText = styled.div`
@@ -122,18 +123,22 @@ export const ConvertButton = styled.button.attrs((props) => ({
 `;
 
 export const FileButton = styled.div`
-  width: 12.5rem;
-  text-align: center;
-  color: #ffffff;
-  font-size: 1.2rem;
-  padding: 0.75rem;
-  background-color: ${({ theme }) => theme.colors.darkOrange};
-  border-radius: 0.625rem 0.625rem 0 0;
-  position: absolute;
-  top: 2rem;
-  right: 3rem;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  position: absolute;
+  top: 2rem;
+  right: 3rem;
+
+  width: 12.5rem;
+  padding: 0.75rem;
+  text-align: center;
+  color: #ffffff;
+  font-size: 1.2rem;
+  background-color: ${({ theme }) => theme.colors.darkOrange};
+  border-radius: 0.625rem 0.625rem 0 0;
+
+  user-select: none;
+  cursor: pointer;
 `;

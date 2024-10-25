@@ -119,6 +119,7 @@ const MyPage = () => {
 
 // text
 const TitleText = styled.span`
+  user-select: none;
   color: white;
   font-weight: bold;
 `;
