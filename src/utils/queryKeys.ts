@@ -5,6 +5,7 @@ export const queryKeys = {
   userinfo: ['user-info'],
   statistics: ['statistics'],
   list: 'convert-list',
+  detail: ['convert-detail'],
 };
 
 export const mutationKeys = {
