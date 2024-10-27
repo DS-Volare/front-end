@@ -8,6 +8,7 @@ import { mutationKeys } from '../../../utils/queryKeys';
 import { useMutation } from '@tanstack/react-query';
 import { useConvert } from '../../../hooks/useConvert';
 import { useNovelData } from '../../../context/convertDataContext';
+import { useConvertStep } from '../../../context/convertStepContext';
 
 interface ModalProps {
   isOpen: boolean;
@@ -25,6 +26,7 @@ const CreateNovelModal = ({
   const [situation, setSituation] = useState('');
   const { createNovel } = useConvert();
   const { setText } = useNovelData();
+  const { step, setStep } = useConvertStep(); // 변환 단계 관리
 
   const handleLocationChange = (event: ChangeEvent<HTMLInputElement>) => {
     setLocation(event.target.value);
@@ -41,6 +43,10 @@ const CreateNovelModal = ({
     onSuccess: (result) => {
       setIsLoading(false);
       setText(result.novel);
+
+      // step 값 update
+      step[0] = true;
+      setStep([...step]);
 
       // 데이터 초기화
       setLocation('');
