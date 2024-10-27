@@ -29,7 +29,7 @@ const ChatbotBox = () => {
   const client = useRef<CompatClient>(); // 채팅 Stomp 클라이언트
   const { startNewChat, getChatList } = useConvert();
   const { scriptId, setScriptId } = useScriptIdData();
-  setScriptId(14); // ★★★ 테스트용. 추후 삭제
+  //setScriptId(14); // ★★★ 테스트용
   const [chatRoomId, setChatRoomId] = useState<string>('');
   const [scrollHeight, setScrollHeight] = useState<number>(10);
 
@@ -56,10 +56,9 @@ const ChatbotBox = () => {
   };
 
   const startChatHandler = async () => {
-    // ★★★ 테스트용. 주석 해제할 것
-    // const result = await startNewChat(scriptId);
-    // setChatRoomId(result.chatRoomId);
-    setChatRoomId('1ed12435-a04b-4fc6-b339-e670a75e4a8b');
+    //setChatRoomId('1ed12435-a04b-4fc6-b339-e670a75e4a8b'); // ★★★ 테스트용
+    const result = await startNewChat(scriptId);
+    setChatRoomId(result.chatRoomId);
   };
 
   // (stomp) connect & subscribe
