@@ -28,7 +28,12 @@ const NavBar = () => {
   }, []);
 
   const navigateConvertScript = () => {
-    navigate('/convert');
+    const { isCheckUser } = getTokenUser();
+    if (Boolean(isCheckUser)) {
+      navigate('/convert');
+    } else {
+      openModalFunc(); // 로그인 모달 띄우기
+    }
   };
 
   const navigateMypage = () => {
