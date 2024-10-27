@@ -16,6 +16,7 @@ import {
 } from '../../../styles/convertBoxStyles';
 import { useConvertStep } from '../../../context/convertStepContext';
 import { useNovelData } from '../../../context/convertDataContext';
+import CreateNovelModal from './CreateNovelModal';
 
 type props = {
   data: string;
@@ -29,6 +30,11 @@ const NovelBox = forwardRef<HTMLDivElement, props>(
     const { text, setText } = useNovelData();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { step, setStep } = useConvertStep(); // 변환 단계 관리
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+
+    const openModalFunc = () => {
+      setModalIsOpen(!modalIsOpen);
+    };
 
     // 파일 업로드
     const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
@@ -70,7 +76,15 @@ const NovelBox = forwardRef<HTMLDivElement, props>(
     return (
       <div ref={ref}>
         <GlassBox $hasData={true}>
+          <CreateNovelModal
+            isOpen={modalIsOpen}
+            setModalIsOpen={setModalIsOpen}
+            mutate={() => openModalFunc()}
+          />
           <TitleText>원고 작성</TitleText>
+          <CreateNovelButton onClick={() => openModalFunc()}>
+            소설 생성
+          </CreateNovelButton>
           <FileButton onClick={handleButtonClick}>
             <FileUploadIcon width="2rem" height="2rem" />
             &nbsp;파일 업로드
@@ -99,4 +113,16 @@ export default NovelBox;
 
 const HiddenFileInput = styled.input`
   display: none;
+`;
+
+const CreateNovelButton = styled.button`
+  position: absolute;
+  top: 2.8rem;
+  left: 12rem;
+  width: 7rem;
+  height: 2rem;
+  background-color: ${({ theme }) => theme.colors.olive};
+  border-radius: 2rem;
+  color: white;
+  font-size: 1rem;
 `;
