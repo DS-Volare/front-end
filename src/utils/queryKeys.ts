@@ -5,9 +5,11 @@ export const queryKeys = {
   userinfo: ['user-info'],
   statistics: ['statistics'],
   list: 'convert-list',
+  detail: ['convert-detail'],
 };
 
 export const mutationKeys = {
+  mutationCreateNovel: ['mutate-save-novel'],
   mutateSaveNovel: ['mutate-save-novel'],
   mutateCharacterList: ['mutate-character-list'],
   mutateScript: ['mutate-script'],
