@@ -4,17 +4,27 @@ import theme from '../../../styles/theme';
 import { CreateNovelModalStyle } from '../../../styles/convertBoxStyles';
 import { ChangeEvent, useState } from 'react';
 import CreateNovelCharacterChipList from './CreateNovelCharacterChipList';
+import { mutationKeys } from '../../../utils/queryKeys';
+import { useMutation } from '@tanstack/react-query';
+import { useConvert } from '../../../hooks/useConvert';
+import { useNovelData } from '../../../context/convertDataContext';
 
 interface ModalProps {
   isOpen: boolean;
   setModalIsOpen: (value: boolean) => void;
-  mutate: () => void;
+  setIsLoading: (value: boolean) => void;
 }
 
-const CreateNovelModal = ({ isOpen, setModalIsOpen, mutate }: ModalProps) => {
+const CreateNovelModal = ({
+  isOpen,
+  setModalIsOpen,
+  setIsLoading,
+}: ModalProps) => {
   const [location, setLocation] = useState('');
   const [characterList, setCharacterList] = useState<string[]>([]);
   const [situation, setSituation] = useState('');
+  const { createNovel } = useConvert();
+  const { setText } = useNovelData();
 
   const handleLocationChange = (event: ChangeEvent<HTMLInputElement>) => {
     setLocation(event.target.value);
@@ -22,6 +32,32 @@ const CreateNovelModal = ({ isOpen, setModalIsOpen, mutate }: ModalProps) => {
 
   const handleSituationChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSituation(event.target.value);
+  };
+
+  // create novel
+  const CreateNovelMutate = useMutation({
+    mutationKey: mutationKeys.mutationCreateNovel,
+    mutationFn: () => createNovel(location, characterList, situation),
+    onSuccess: (result) => {
+      setIsLoading(false);
+      setText(result.novel);
+
+      // 데이터 초기화
+      setLocation('');
+      setCharacterList([]);
+      setSituation('');
+    },
+    onError: () => {
+      console.log('create novel failure.');
+    },
+  });
+
+  const handleButtonClick = () => {
+    setModalIsOpen(false);
+    setIsLoading(true);
+
+    // api 호출
+    CreateNovelMutate.mutate();
   };
 
   return (
@@ -64,6 +100,8 @@ const CreateNovelModal = ({ isOpen, setModalIsOpen, mutate }: ModalProps) => {
             placeholder="예시: 학교에서 함께 숙제를 하고 있는 상황"
           />
         </ContentBox>
+        <div style={{ height: '1rem' }} />
+        <Button onClick={handleButtonClick}>소설 생성하기!</Button>
       </LayoutContainer>
     </Modal>
   );
@@ -76,11 +114,6 @@ const Text = styled.span`
 `;
 
 // container
-const ExitContainer = styled.div`
-  display: flex;
-  height: 2rem;
-`;
-
 const LayoutContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -113,11 +146,12 @@ const Input = styled.input`
 
 const Button = styled.button`
   text-align: center;
-  width: 270px;
-  padding: 0.8rem 0;
-  font-size: 0.8rem;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
   border-radius: 1rem;
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+  background-color: ${({ theme }) => theme.colors.brown};
+  color: white;
 `;
 
 export default CreateNovelModal;

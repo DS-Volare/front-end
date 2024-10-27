@@ -154,7 +154,7 @@ export const CreateNovelModalStyle: ReactModal.Styles = {
     left: 0,
     right: 0,
     margin: 'auto',
-    height: 550,
+    height: 700,
     backgroundColor: 'rgba(255,255,255,0.7)',
     overflow: 'auto',
     borderStyle: 'none',
