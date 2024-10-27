@@ -50,13 +50,17 @@ ChartJS.register(
 
 const options = {
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     legend: {
       position: 'top' as const,
     },
     title: {
       display: true,
-      text: '등장인물',
+      text: '등장인물 출연율',
+      font: {
+        size: 18,
+      },
     },
   },
   scales: {
@@ -70,7 +74,7 @@ const options = {
   indexAxis: 'y' as const,
 };
 
-const labels = ['등장인물'];
+const labels = ['대사 비중'];
 
 const randomColor = (): string => {
   const r: number = Math.floor(Math.random() * 256);
@@ -96,7 +100,7 @@ const RateChart = ({ result }: RateChartProps) => {
         backgroundColor: color + ', 0.5)',
         barThickness: 20,
       };
-    });
+    }, []);
 
     setData({
       labels,
@@ -111,6 +115,7 @@ const RateChart = ({ result }: RateChartProps) => {
 };
 
 const BarContainer = styled.div`
+  height: 120px;
   width: auto;
 `;
 
