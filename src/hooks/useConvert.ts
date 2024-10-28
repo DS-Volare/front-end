@@ -8,6 +8,7 @@ import {
   useNovelTitleData,
   useScriptData,
   useScriptIdData,
+  useChatRoomIdData,
 } from '../context/convertDataContext';
 import { Script } from '../types';
 import { useAuth } from './useAuth';
@@ -26,6 +27,7 @@ export const useConvert = () => {
   const { setScript } = useScriptData();
   const { setScriptId } = useScriptIdData();
   const { setStep } = useConvertStep();
+  const { setChatRoomId } = useChatRoomIdData();
 
   // axios instance 선언
   const { createAxiosInstance } = useAxiosInstances();
@@ -139,7 +141,6 @@ export const useConvert = () => {
       const result = await axiosInstance.post(`/spring/chatRooms/${scriptId}`);
 
       const data = result.data;
-      console.log(data);
       if (data.isSuccess) {
         console.log(data.message);
         return data.result;
@@ -154,27 +155,30 @@ export const useConvert = () => {
 
   // api: get chat list / spring
   // (need fix) cursor-based-pagination
-  const getChatList = async ({ queryKey, pageParam = '' }: QueryFunctionContext<string[], string>) => {
+  const getChatList = async ({
+    queryKey,
+    pageParam = '',
+  }: QueryFunctionContext<string[], string>) => {
     const [, chatRoomId] = queryKey;
 
-  try {
-    const response = await axios.get(`/spring/chats/${chatRoomId}`, {
-      params: {
-        lastMessageId: pageParam || undefined, // 마지막 메시지 ID를 쿼리 파라미터로 전달
-      },
-    });
+    try {
+      const response = await axios.get(`/spring/chats/${chatRoomId}`, {
+        params: {
+          lastMessageId: pageParam || undefined, // 마지막 메시지 ID를 쿼리 파라미터로 전달
+        },
+      });
 
-    const data = response.data;
-    if (data.isSuccess) {
-      return data;
-    } else {
-      console.log(data.message);
-      return data.false;
+      const data = response.data;
+      if (data.isSuccess) {
+        return data;
+      } else {
+        console.log(data.message);
+        return data.false;
+      }
+    } catch (err) {
+      console.log(err); // temporary error handling
     }
-  } catch (err) {
-    console.log(err); // temporary error handling
-  }
-};
+  };
 
   // api: apperance rate
   const apperanceRate = async (scriptId: number) => {
@@ -255,6 +259,7 @@ export const useConvert = () => {
     setScriptId(0);
     setNovelId('');
     setStep([false, false, false, false]);
+    setChatRoomId('');
   };
 
   return {
