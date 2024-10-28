@@ -119,7 +119,7 @@ const Circle = styled(motion.div)<typeProps>`
         return css`
           width: 8rem;
           height: 8rem;
-          background-color: ${theme.colors.olive};
+          background-color: ${theme.colors.darkOlive};
           top: 8rem;
           left: -3rem;
 
