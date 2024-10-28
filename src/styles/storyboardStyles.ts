@@ -129,7 +129,7 @@ export const FileButton = styled.div`
   background-color: ${({ theme }) => theme.colors.darkOrange};
   border-radius: 0.625rem 0.625rem 0 0;
   position: absolute;
-  top: 2rem;
+  bottom: 39rem;
   right: 3rem;
   cursor: pointer;
   display: flex;

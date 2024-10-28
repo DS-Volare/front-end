@@ -128,7 +128,7 @@ export const FileButton = styled.div`
   justify-content: center;
 
   position: absolute;
-  top: 2rem;
+  bottom: 39rem;
   right: 3rem;
 
   width: 12.5rem;
