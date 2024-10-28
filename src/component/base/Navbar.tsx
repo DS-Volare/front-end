@@ -5,8 +5,6 @@ import LoginModal from './LoginModal';
 import { ReactComponent as NavLogo } from '../../assets/icons/nav_logo_icon.svg';
 import { useUser } from '../../hooks/useUser';
 import LogoutModal from './LogoutModal';
-import { Toast } from '../../styles/ToastStyle';
-import { toastText } from '../../utils/toastText';
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -60,17 +58,19 @@ const NavBar = () => {
         setModalIsOpen={setLogoutModalIsOpen}
         setIsLogin={setIsLogin}
       />
-      <NavLogo width={50} onClick={navigateMainPage} />
-      <Text onClick={navigateConvertScript}>대본 변환</Text>
+      <MainLogo>
+        <NavLogo width={50} onClick={navigateMainPage} />
+      </MainLogo>
+      <MenuText onClick={navigateConvertScript}>대본 변환</MenuText>
       <div style={{ flex: 1 }} />
       {!isLogin ? (
         <>
-          <Text onClick={openModalFunc}>로그인</Text>
+          <MenuText onClick={openModalFunc}>로그인</MenuText>
         </>
       ) : (
         <>
-          <Text onClick={navigateMypage}>마이페이지</Text>
-          <Text onClick={handleLogout}>로그아웃</Text>
+          <MenuText onClick={navigateMypage}>마이페이지</MenuText>
+          <MenuText onClick={handleLogout}>로그아웃</MenuText>
         </>
       )}
     </Container>
@@ -78,9 +78,12 @@ const NavBar = () => {
 };
 
 // text
-const Text = styled.span`
-  font-size: 1rem;
+const MenuText = styled.div`
+  font-size: 1.15rem;
   color: white;
+  padding: 1rem;
+  user-select: none;
+  cursor: pointer;
 `;
 
 // container
@@ -91,6 +94,10 @@ const Container = styled.div`
   padding: 0 50px;
   gap: 30px;
   background-color: ${({ theme }) => theme.colors.olive};
+`;
+
+const MainLogo = styled.div`
+  cursor: pointer;
 `;
 
 export default NavBar;

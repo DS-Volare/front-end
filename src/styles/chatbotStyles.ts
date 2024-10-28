@@ -4,12 +4,13 @@ import styled from "styled-components";
 // Styled Components
 export const ChatbotButton = styled(motion.button)`
   position: absolute;
-  right: 5rem;
-  bottom: 1rem;
+  right: 7rem;
+  bottom: 2rem;
   width: 4rem;
   height: 4rem;
   border-radius: 2rem;
-  background-color: ${({ theme }) => theme.colors.orange};
+  padding: 0;
+  background-color: ${({ theme }) => theme.colors.darkBrown};
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
@@ -17,7 +18,7 @@ export const ChatContainer = styled(motion.div)`
   position: absolute;
   z-index: 1;
   right: 0;
-  width: 20rem;
+  width: 22rem;
   height: 100%;
   display: flex;
   background: rgba(149, 155, 136, 0.6);
@@ -38,12 +39,12 @@ export const Title = styled.h1`
   padding: 20px;
   margin: 0;
   color: white;
-  height: 1.25rem;
+  height: 4rem;
 `;
 
 export const MessageListContainer = styled.div`
   width: 100%;
-  padding: 20px;
+  padding: 0 20px;
   flex-grow: 1;
   overflow-y: auto;
 `;
@@ -108,9 +109,12 @@ export const MessageFormContainer = styled.form`
 export const ChatInputArea = styled.textarea`
   flex-grow: 1;
   padding: 10px;
-  border-radius: 16px;
-  border: 1px solid #ccc;
+  border-radius: 10px;
+  border: 1px solid #ddd;
   margin-right: 10px;
+  min-height: 75px;
+  overflow: hidden;
+  font-size: 1rem;
 
   resize: none;
   &:focus {
@@ -119,12 +123,17 @@ export const ChatInputArea = styled.textarea`
 `;
 
 export const SubmitButton = styled.button`
-  padding: 10px 20px;
-  border-radius: 16px;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 2rem;
   border: none;
   background-color: ${({ theme }) => theme.colors.orange};
   color: #fff;
   cursor: pointer;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &:disabled {
     background-color: #ccc;

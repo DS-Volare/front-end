@@ -13,6 +13,7 @@ import { Script } from '../types';
 import { useAuth } from './useAuth';
 import { useAxiosInstances } from './useAxiosInstance';
 import { useConvertStep } from '../context/convertStepContext';
+import { QueryFunctionContext } from '@tanstack/react-query';
 
 export const useConvert = () => {
   const { getTokenUser } = useUser();
@@ -153,22 +154,27 @@ export const useConvert = () => {
 
   // api: get chat list / spring
   // (need fix) cursor-based-pagination
-  const getChatList = async (chatRoomId: string) => {
-    try {
-      const result = await axiosInstance.get(`/spring/chats/${chatRoomId}`);
+  const getChatList = async ({ queryKey, pageParam = '' }: QueryFunctionContext<string[], string>) => {
+    const [, chatRoomId] = queryKey;
 
-      const data = result.data;
-      if (data.isSuccess) {
-        // console.log(data.result.allMessages);
-        return data.result;
-      } else {
-        console.log(data.message);
-        return false;
-      }
-    } catch (err) {
-      console.log(err); // temporary error handling
+  try {
+    const response = await axios.get(`/spring/chats/${chatRoomId}`, {
+      params: {
+        lastMessageId: pageParam || undefined, // 마지막 메시지 ID를 쿼리 파라미터로 전달
+      },
+    });
+
+    const data = response.data;
+    if (data.isSuccess) {
+      return data;
+    } else {
+      console.log(data.message);
+      return data.false;
     }
-  };
+  } catch (err) {
+    console.log(err); // temporary error handling
+  }
+};
 
   // api: apperance rate
   const apperanceRate = async (scriptId: number) => {

@@ -1,8 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import {
-  useConvertStep,
-} from '../../context/convertStepContext';
+import { useConvertStep } from '../../context/convertStepContext';
 
 interface IndicatorProps {
   // 모든 단계를 거쳤는지 여부
@@ -65,22 +63,26 @@ const IndicatorBox = styled.button.attrs((props) => ({
   height: 30px;
   padding: 1.1rem;
   font-size: 1rem;
+  user-select: none;
 
   background-color: ${({ theme }) => theme.colors.beige};
   color: ${({ theme }) => theme.colors.brown};
   font-weight: bold;
+  cursor: default;
 
   ${({ selected, $index, $step, theme }) => css`
     ${$step &&
     css`
       background-color: ${theme.colors.orange};
       color: white;
+      cursor: pointer;
     `}
 
     ${selected === $index &&
     css`
       background-color: ${theme.colors.darkOrange};
       color: white;
+      cursor: pointer;
     `}
   `}
 `;

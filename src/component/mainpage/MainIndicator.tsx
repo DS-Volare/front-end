@@ -62,6 +62,7 @@ const IndicatorBox = styled(motion.div)`
 `;
 
 const IndicatorText = styled.span<boxProps>`
+  user-select: none;
   font-weight: bold;
   font-size: 1rem;
   color: ${({ theme }) => theme.colors.brown};
@@ -78,6 +79,8 @@ const IndicatorShape = styled.div<boxProps>`
   height: 2rem;
   background-color: gray;
   border-radius: 5rem;
+  user-select: none;
+  cursor: pointer;
   ${({ selected, $index }) =>
     selected === $index &&
     css`

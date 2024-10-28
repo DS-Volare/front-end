@@ -79,6 +79,8 @@ const CardBox = styled(motion.div)`
   background-color: rgba(255, 255, 245, 0.6);
   border-radius: 1.2rem;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05), 0 6px 6px rgba(0, 0, 0, 0.1);
+  user-select: none;
+  cursor: pointer;
 `;
 
 const ContentBox = styled.div`

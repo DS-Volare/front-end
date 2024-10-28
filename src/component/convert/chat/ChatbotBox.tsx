@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import {
   ChatbotButton,
@@ -14,6 +14,11 @@ import { useConvert } from '../../../hooks/useConvert';
 import { useScriptIdData } from '../../../context/convertDataContext';
 import { Toast } from '../../../styles/ToastStyle';
 import { toastText } from '../../../utils/toastText';
+import { queryKeys } from '../../../utils/queryKeys';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import Spinner from '../../base/Spinner';
+import { ReactComponent as ChatbotIcon } from '../../../assets/icons/pencil_center.svg';
+import { ReactComponent as GoBackIcon } from '../../../assets/icons/go-back.svg';
 
 const ChatbotBox = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false); // drawer
@@ -23,26 +28,46 @@ const ChatbotBox = () => {
   const messageListRef = useRef<HTMLDivElement>(null); // 메시지 리스트 영역. 스크롤 조작을 위함
   const client = useRef<CompatClient>(); // 채팅 Stomp 클라이언트
   const { startNewChat, getChatList } = useConvert();
+  const { scriptId, setScriptId } = useScriptIdData();
+  //setScriptId(14); // ★★★ 테스트용
+  const [chatRoomId, setChatRoomId] = useState<string>('');
+  const [scrollHeight, setScrollHeight] = useState<number>(10);
 
-  const { scriptId } = useScriptIdData();
-  const [chatRoomId, setChatRoomId] = useState<string>('none');
+  // 채팅 목록 무한스크롤: 커서 기반 페이징
+  const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
+    useInfiniteQuery({
+      queryKey: [queryKeys.chatlist, chatRoomId],
+      queryFn: getChatList,
+      getNextPageParam: (lastPage) => {
+        if (lastPage?.result?.hasNext) {
+          const lastMessage = lastPage.result.allMessages[0];
+          return lastMessage.messageId;
+        }
+        return null;
+      },
+      initialPageParam: '', // 최초 요청 시 pageParam을 빈 문자열로 설정 (최신 메시지 요청 시)
+      enabled: !!chatRoomId, // chatRoomId가 있을 때만 쿼리 실행
+    });
+
+  const handleLoadMore = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  };
 
   const startChatHandler = async () => {
-    console.log(scriptId);
+    //setChatRoomId('1ed12435-a04b-4fc6-b339-e670a75e4a8b'); // ★★★ 테스트용
     const result = await startNewChat(scriptId);
     setChatRoomId(result.chatRoomId);
   };
 
   // (stomp) connect & subscribe
-  const connectHandler = async (chatRoomId: string) => {
-    const result = await getChatList(chatRoomId);
-    setMessages(result.allMessages);
-
+  const connectHandler = useCallback(async (chatRoomId: string) => {
     client.current = Stomp.over(() => {
       const sock = new WebSocket(`ws://localhost:8080/websocket`);
       return sock;
     });
-    client.current!.debug = function (str) {}; // console.log off
+    client.current!.debug = function (str) {}; // (Stomp CompatClient) console.log off
 
     client.current.connect(
       {
@@ -70,7 +95,7 @@ const ChatbotBox = () => {
       }
     );
     return client;
-  };
+  }, []);
 
   // (stomp) disconnect
   const disconnectHandler = () => {
@@ -117,12 +142,17 @@ const ChatbotBox = () => {
     }
   }, [messages, currentTypingId]);
 
-  // 새 메시지 전송 시 스크롤을 최하단으로 설정
-  useEffect(() => {
+  // 스크롤을 최하단으로 설정
+  const scrollToBottom = () => {
     if (messageListRef.current) {
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
     }
-  }, [messages]);
+  };
+
+  // 새 메시지 전송 시 스크롤을 최하단으로 설정
+  useEffect(() => {
+    scrollToBottom();
+  }, [isTyping]); // 의존성 변경 요망
 
   // 챗봇이 타이핑 시작 시 isTyping을 true로 설정
   useEffect(() => {
@@ -135,13 +165,83 @@ const ChatbotBox = () => {
     closed: { opacity: 1, x: 0, zIndex: 1 },
   };
 
-  // floating button
+  // floating button 활성화
   useEffect(() => {
     if (scriptId !== 0) {
       Toast.success(toastText.chatbotEnable);
       startChatHandler();
     }
   }, [scriptId]);
+
+  // 스크롤 이벤트
+  const handleScroll = () => {
+    const container = messageListRef.current;
+    if (container) {
+      const scrollY = container.scrollTop;
+      if (container.scrollTop === 0 && hasNextPage && !isFetchingNextPage) {
+        // 스크롤이 맨 위에 닿았고 다음 페이지가 있다면 handleLoadMore 호출
+        handleLoadMore();
+      }
+    }
+  };
+
+  const prevFetching = useRef(isFetchingNextPage); // 이전 상태 저장
+
+  // 메시지 목록 업데이트
+  // infiniteQuery에서 hasNext, hasPrevious 모두를 사용하지 않고 hasNext만 사용하기로 해서 이렇게 업데이트해야 함(잘못된 선택일까...)
+  useEffect(() => {
+    console.log(data);
+    if (data?.pages?.length && data.pages[0] !== undefined) {
+      console.log(data.pages.length);
+
+      const messages: Message[] = data.pages
+        .slice() // 원본 배열을 수정하지 않기 위해 복사
+        .reverse() // 페이지 순서를 반대로 (오래된 페이지가 앞쪽으로)
+        .flatMap((page: any) => {
+          return page.result.allMessages as Message[];
+        });
+
+      setMessages(messages);
+    }
+
+    // 스크롤 위치 복원
+    const container = messageListRef.current;
+    if (!container) return;
+    // 데이터 로드 완료 시점 (isFetchingNextPage가 true -> false로 바뀔 때)
+    if (prevFetching.current && !isFetchingNextPage) {
+      // 스크롤 높이 차이 계산
+      const previousScrollHeight = container.scrollHeight;
+
+      // 데이터가 로드된 후에 스크롤 위치 보정
+      setTimeout(() => {
+        const newScrollHeight = container.scrollHeight;
+        const heightDifference = newScrollHeight - previousScrollHeight;
+        container.scrollTop += heightDifference;
+      }, 0); // 데이터가 렌더링된 후 보정
+    }
+    // 이전 상태 업데이트
+    prevFetching.current = isFetchingNextPage;
+  }, [isFetchingNextPage, data]); // isFetchingNextPage가 true->false일 때만 동작해도 됨
+
+  useEffect(() => {
+    const container = messageListRef.current;
+    if (container) {
+      // 스크롤 이벤트 리스너 추가
+      container.addEventListener('scroll', handleScroll);
+
+      // 스크롤 위치 복원
+      if (isDrawerOpen) {
+        container.scrollTop = scrollHeight;
+      } else {
+        setScrollHeight(container.scrollTop);
+      }
+
+      return () => {
+        // 컴포넌트 언마운트 시 이벤트 리스너 제거
+        container.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, [isDrawerOpen, isFetchingNextPage]);
 
   return (
     <>
@@ -155,12 +255,15 @@ const ChatbotBox = () => {
           >
             <ChatBox>
               <Title>Chat</Title>
-              <MessageList
-                messages={messages}
-                currentTypingId={currentTypingId}
-                onEndTyping={handleEndTyping}
-                ref={messageListRef}
-              />
+              {isFetchingNextPage && <Spinner text="" />}
+              {data && (
+                <MessageList
+                  messages={messages}
+                  currentTypingId={currentTypingId}
+                  onEndTyping={handleEndTyping}
+                  ref={messageListRef}
+                />
+              )}
               <MessageForm onSendMessage={sendHandler} isTyping={isTyping} />
             </ChatBox>
           </ChatContainer>
@@ -173,6 +276,7 @@ const ChatbotBox = () => {
           variants={buttonVariants}
           transition={{ type: 'tween' }}
           whileTap={{ scale: 0.9 }}
+          whileHover={isDrawerOpen ? { scale: 0.9 } : { scale: 1.1 }}
           onClick={() => {
             setIsDrawerOpen(!isDrawerOpen);
             if (isDrawerOpen) {
@@ -181,7 +285,13 @@ const ChatbotBox = () => {
               connectHandler(chatRoomId);
             }
           }}
-        />
+        >
+          {isDrawerOpen ? (
+            <GoBackIcon height="1.5rem" />
+          ) : (
+            <ChatbotIcon width="4rem" height="4rem" />
+          )}
+        </ChatbotButton>
       )}
     </>
   );

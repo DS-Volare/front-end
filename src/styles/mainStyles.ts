@@ -10,6 +10,7 @@ export const TitleText = styled.span`
   color: ${({ theme }) => theme.colors.darkBrown};
   font-size: 4rem;
   line-height: 1.2;
+  user-select: none;
 `;
 
 export const SubTitleText = styled.span<textProps>`
@@ -38,7 +39,7 @@ export const ExplainGridBox = styled.div<textProps>`
   bottom: ${({ $page }) => ($page === 'second' ? '5rem' : '11rem')};
   right: 7vw;
   width: 20vw;
-  height: 20vh;
+  min-height: 20vh;
   z-index: 1;
   padding: 1rem;
 
@@ -68,7 +69,7 @@ export const ModalCustomStyle: ReactModal.Styles = {
     right: 0,
     margin: 'auto',
     height: 370,
-    backgroundColor: 'rgba(255,255,255,0.6)',
+    backgroundColor: 'rgba(255,255,255,0.8)',
     overflow: 'auto',
     borderStyle: 'none',
     borderRadius: '30px',

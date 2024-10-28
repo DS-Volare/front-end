@@ -100,7 +100,7 @@ const Circle = styled(motion.div)<typeProps>`
           width: 4rem;
           height: 4rem;
           background-color: ${theme.colors.ivory};
-          top: 14rem;
+          top: 16rem;
           left: 8rem;
 
           animation: ${Gradient} 3s ease-in-out infinite;
