@@ -11,7 +11,10 @@ import MessageList from './MessageList';
 import { Message } from '../../../types';
 import { CompatClient, IMessage, Stomp } from '@stomp/stompjs';
 import { useConvert } from '../../../hooks/useConvert';
-import { useScriptIdData } from '../../../context/convertDataContext';
+import {
+  useScriptIdData,
+  useChatRoomIdData,
+} from '../../../context/convertDataContext';
 import { Toast } from '../../../styles/ToastStyle';
 import { toastText } from '../../../utils/toastText';
 import { queryKeys } from '../../../utils/queryKeys';
@@ -29,8 +32,8 @@ const ChatbotBox = () => {
   const client = useRef<CompatClient>(); // 채팅 Stomp 클라이언트
   const { startNewChat, getChatList } = useConvert();
   const { scriptId, setScriptId } = useScriptIdData();
+  const { chatRoomId, setChatRoomId } = useChatRoomIdData();
   //setScriptId(14); // ★★★ 테스트용
-  const [chatRoomId, setChatRoomId] = useState<string>('');
   const [scrollHeight, setScrollHeight] = useState<number>(10);
 
   // 채팅 목록 무한스크롤: 커서 기반 페이징
@@ -167,7 +170,11 @@ const ChatbotBox = () => {
 
   // floating button 활성화
   useEffect(() => {
-    if (scriptId !== 0) {
+    if (chatRoomId !== '') {
+      // 이미 채팅방이 존재할 때
+      setChatRoomId(chatRoomId);
+    } else if (scriptId !== 0 && chatRoomId == '') {
+      // 채팅방이 없을 때
       Toast.success(toastText.chatbotEnable);
       startChatHandler();
     }

@@ -22,6 +22,7 @@ import {
   useScriptData,
   useScriptIdData,
   useStoryboardData,
+  useChatRoomIdData,
 } from '../context/convertDataContext';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { mutationKeys, queryKeys } from '../utils/queryKeys';
@@ -68,6 +69,7 @@ const ConvertPage = () => {
   const [fadeOut, setFadeOut] = useState(false); // 배경 애니메이션 fade 상태
   const [currentBg, setCurrentBg] = useState(bgImgOne);
   const [isDetail, setIsDetail] = useState(false);
+  const { chatRoomId, setChatRoomId } = useChatRoomIdData();
 
   const { step, setStep } = useConvertStep();
   const { convertDetail, apperanceRate, convertStatistics } = useConvert();
@@ -90,25 +92,26 @@ const ConvertPage = () => {
   const convertDetailQuery = useQuery({
     queryKey: queryKeys.detail,
     queryFn: () => convertDetail(location.state.novelId),
-    enabled: isDetail, // isDetail이 true가 되었을 때 쿼리 실행
+    enabled: isDetail, // isDetail이 true
   });
 
   const appearanceQuery = useQuery({
     queryKey: queryKeys.appearance,
     queryFn: () => apperanceRate(scriptId),
-    enabled: isDetail,
+    enabled: isDetail && scriptId != 0, // isDetail이 true, scriptId가 업데이트 되었을 때 실행하는 쿼리
   });
 
   const statisticsQuery = useQuery({
     queryKey: queryKeys.statistics,
     queryFn: () => convertStatistics(scriptId),
-    enabled: isDetail,
+    enabled: isDetail && scriptId != 0,
   });
 
   // 변환페이지 이동했을시 data, step 초기화
   useEffect(() => {
     if (isDetail && !convertDetailQuery.isFetching) {
-      const { novel, script, storyBoard } = convertDetailQuery.data.result;
+      const { novel, script, storyBoard, chatRoomId } =
+        convertDetailQuery.data.result;
 
       // 1. step 초기화
       let tempConvertStep = [true]; // 소설은 항상 있으므로 true를 넣어줌
@@ -123,6 +126,7 @@ const ConvertPage = () => {
       // 2. data 초기화
       setTitle(novel.title); // 소설 제목
       setText(novel.storyText); // 소설 내용
+      setChatRoomId(chatRoomId); // 채팅방 번호
 
       if (script.isExist) setScript({ scene: script.data.script }); // 대본
       if (storyBoard.isExist) setStoryboard(storyBoard.data); // 스토리보드
@@ -156,7 +160,7 @@ const ConvertPage = () => {
       window.removeEventListener('popstate', preventGoBack);
       window.removeEventListener('beforeunload', preventLoad);
     };
-  }, []);
+  }, [location.state]);
 
   // 상세 페이지일시 쿼리 재요청
   useEffect(() => {
@@ -237,7 +241,7 @@ const ConvertPage = () => {
               />
             )}
             {isDetail &&
-              !convertDetailQuery.isFetching &&
+              convertDetailQuery.data &&
               convertDetailQuery.data.result.script.isExist && (
                 <div ref={stepTabs[1].element}>
                   <GlassBox $hasData={true}>
@@ -263,7 +267,7 @@ const ConvertPage = () => {
               />
             )}
             {isDetail &&
-              !convertDetailQuery.isFetching &&
+              convertDetailQuery.data &&
               convertDetailQuery.data.result.storyBoard.isExist && (
                 <div ref={stepTabs[2].element}>
                   <GlassBox $hasData={true}>
@@ -316,7 +320,11 @@ const ConvertPage = () => {
             )}
           </ConvertStepWrapper>
         </AnimationProvider>
-        <ChatbotBox />
+        {/* 챗봇 박스 */}
+        {!isDetail && <ChatbotBox />}
+        {isDetail && convertDetailQuery.data && chatRoomId !== null && (
+          <ChatbotBox />
+        )}
         {/* pop page modal */}
         <PopPageModal isOpen={isOpen} setModalIsOpen={setModalIsOpen} />
       </BackgroundCover>

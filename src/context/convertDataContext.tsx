@@ -38,6 +38,11 @@ type StoryboardContextType = {
   setStoryboard: React.Dispatch<React.SetStateAction<Storyboard>>;
 };
 
+type ChatRoomIdContextType = {
+  chatRoomId: string;
+  setChatRoomId: React.Dispatch<React.SetStateAction<string>>;
+};
+
 type StatisticsContextType = {};
 
 // 전역: 컨택스트 정의
@@ -80,6 +85,11 @@ const StoryboardContext = createContext<StoryboardContextType | undefined>({
   setStoryboard: () => {},
 });
 
+const ChatRoomIdContext = createContext<ChatRoomIdContextType | undefined>({
+  chatRoomId: '',
+  setChatRoomId: () => {},
+});
+
 // 컨택스트를 전역적으로 제공할 수 있는 프로바이더 작성, 컴포넌트 순서 상관X
 const ConvertDataProvider = ({ children }: { children: React.ReactNode }) => {
   const [text, setText] = useState<string>('');
@@ -89,25 +99,28 @@ const ConvertDataProvider = ({ children }: { children: React.ReactNode }) => {
   const [novelId, setNovelId] = useState<string>('');
   const [storyboard, setStoryboard] = useState<Storyboard>({ scene: [] });
   const [scriptId, setScriptId] = useState<number>(0);
+  const [chatRoomId, setChatRoomId] = useState<string>('');
 
   return (
-    <StoryboardContext.Provider value={{ storyboard, setStoryboard }}>
-      <NovelTitleContext.Provider value={{ title, setTitle }}>
-        <NovelContext.Provider value={{ text, setText }}>
-          <CharacterContext.Provider
-            value={{ characterList, setCharacterList }}
-          >
-            <ScriptContext.Provider value={{ script, setScript }}>
-              <ScriptIdContext.Provider value={{ scriptId, setScriptId }}>
-                <NovelIdContext.Provider value={{ novelId, setNovelId }}>
-                  {children}
-                </NovelIdContext.Provider>
-              </ScriptIdContext.Provider>
-            </ScriptContext.Provider>
-          </CharacterContext.Provider>
-        </NovelContext.Provider>
-      </NovelTitleContext.Provider>
-    </StoryboardContext.Provider>
+    <ChatRoomIdContext.Provider value={{ chatRoomId, setChatRoomId }}>
+      <StoryboardContext.Provider value={{ storyboard, setStoryboard }}>
+        <NovelTitleContext.Provider value={{ title, setTitle }}>
+          <NovelContext.Provider value={{ text, setText }}>
+            <CharacterContext.Provider
+              value={{ characterList, setCharacterList }}
+            >
+              <ScriptContext.Provider value={{ script, setScript }}>
+                <ScriptIdContext.Provider value={{ scriptId, setScriptId }}>
+                  <NovelIdContext.Provider value={{ novelId, setNovelId }}>
+                    {children}
+                  </NovelIdContext.Provider>
+                </ScriptIdContext.Provider>
+              </ScriptContext.Provider>
+            </CharacterContext.Provider>
+          </NovelContext.Provider>
+        </NovelTitleContext.Provider>
+      </StoryboardContext.Provider>
+    </ChatRoomIdContext.Provider>
   );
 };
 
@@ -176,6 +189,14 @@ const useStoryboardData = () => {
   return context;
 };
 
+const useChatRoomIdData = () => {
+  const context = useContext(ChatRoomIdContext);
+  if (context === undefined) {
+    throw new Error('ChatRoomIdData must be used within a ConvertDataProvider');
+  }
+  return context;
+};
+
 export {
   ConvertDataProvider,
   useNovelIdData,
@@ -185,4 +206,5 @@ export {
   useScriptIdData,
   useScriptData,
   useStoryboardData,
+  useChatRoomIdData,
 };
