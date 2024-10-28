@@ -1,10 +1,4 @@
-import React, {
-  ChangeEvent,
-  useEffect,
-  useRef,
-  forwardRef,
-  useState,
-} from 'react';
+import React, { ChangeEvent, useRef, forwardRef, useState } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as FileUploadIcon } from '../../../assets/icons/file_upload_icon.svg';
 import {
@@ -16,6 +10,9 @@ import {
 } from '../../../styles/convertBoxStyles';
 import { useConvertStep } from '../../../context/convertStepContext';
 import { useNovelData } from '../../../context/convertDataContext';
+import CreateNovelModal from './CreateNovelModal';
+import Spinner from '../../base/Spinner';
+import { spinnerText } from '../../../utils/spinnerText';
 
 type props = {
   data: string;
@@ -29,6 +26,12 @@ const NovelBox = forwardRef<HTMLDivElement, props>(
     const { text, setText } = useNovelData();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { step, setStep } = useConvertStep(); // 변환 단계 관리
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); // 소설 생성 로딩
+
+    const openModalFunc = () => {
+      setModalIsOpen(!modalIsOpen);
+    };
 
     // 파일 업로드
     const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
@@ -70,7 +73,15 @@ const NovelBox = forwardRef<HTMLDivElement, props>(
     return (
       <div ref={ref}>
         <GlassBox $hasData={true}>
+          <CreateNovelModal
+            isOpen={modalIsOpen}
+            setModalIsOpen={setModalIsOpen}
+            setIsLoading={setIsLoading}
+          />
           <TitleText>원고 작성</TitleText>
+          <CreateNovelButton onClick={() => openModalFunc()}>
+            소설 생성
+          </CreateNovelButton>
           <FileButton onClick={handleButtonClick}>
             <FileUploadIcon width="2rem" height="2rem" />
             &nbsp;파일 업로드
@@ -82,12 +93,16 @@ const NovelBox = forwardRef<HTMLDivElement, props>(
             onChange={handleFileUpload}
           />
           <ContentBox>
-            <ScrollTextArea
-              value={text}
-              onChange={handleTextChange}
-              wrap="soft"
-              placeholder="내용을 입력하거나 텍스트 파일을 첨부하세요."
-            />
+            {!isLoading ? (
+              <ScrollTextArea
+                value={text}
+                onChange={handleTextChange}
+                wrap="soft"
+                placeholder="내용을 입력하거나 텍스트 파일을 첨부하세요."
+              />
+            ) : (
+              <Spinner text={spinnerText.createNovel} />
+            )}
           </ContentBox>
         </GlassBox>
       </div>
@@ -99,4 +114,20 @@ export default NovelBox;
 
 const HiddenFileInput = styled.input`
   display: none;
+`;
+
+const CreateNovelButton = styled.button`
+  position: absolute;
+  top: 2.8rem;
+  left: 12rem;
+  width: 7rem;
+  height: 2rem;
+  border-radius: 2rem;
+  color: white;
+  font-size: 1rem;
+  background: linear-gradient(
+    ${({ theme }) => theme.colors.darkOlive},
+    ${({ theme }) => theme.colors.ivory}
+  );
+  background-size: 200% 200%;
 `;

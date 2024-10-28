@@ -31,6 +31,25 @@ export const useConvert = () => {
   const { createAxiosInstance } = useAxiosInstances();
   const axiosInstance = createAxiosInstance(reissue);
 
+  // api: create novel / flask
+  const createNovel = async (
+    location: string,
+    characters: string[],
+    situation: string
+  ) => {
+    try {
+      const result = await axios.post(`/flask/create_novel/`, {
+        location: location,
+        characters: characters,
+        situation: situation,
+      });
+      console.log(result.data);
+      return result.data;
+    } catch (err) {
+      console.log(err); // temporary error handling
+    }
+  };
+
   // api: save novel / spring
   const saveNovel = async (title: string, novel: string) => {
     const requestData = {
@@ -239,6 +258,7 @@ export const useConvert = () => {
   };
 
   return {
+    createNovel,
     saveNovel,
     cognizeCharacter,
     convertScript,

@@ -210,9 +210,9 @@ const CharacterBox = ({
           </TutorialBox>
           {/* 소설 작성 후 버튼 활성화 */}
           <ConvertButton
-            disabled={step[0]}
+            disabled={step[0] && title !== ''}
             onClick={handleClick}
-            $isWrite={step[0]}
+            $isWrite={step[0] && title !== ''}
           >
             등장인물 인식
           </ConvertButton>

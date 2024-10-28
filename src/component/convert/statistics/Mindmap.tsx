@@ -325,8 +325,6 @@ const Mindmap = ({ result }: MindmapProps) => {
   const height = 700;
   const svgRef = useRef<HTMLDivElement | null>(null);
 
-  console.log(result);
-
   const RefineData = (result: ResponseStatisticsType) => {
     const data: Data = {
       nodes: [],
@@ -335,14 +333,14 @@ const Mindmap = ({ result }: MindmapProps) => {
 
     // base push
     data.nodes.push(
-      { id: result.title, group: '1', level: 1 },
+      { id: '<' + result.title + '>', group: '1', level: 1 },
       { id: '장소', group: '2', level: 2 },
       { id: '등장인물', group: '3', level: 2 }
     );
 
     data.links.push(
-      { source: result.title, target: '장소', value: 1 },
-      { source: result.title, target: '등장인물', value: 1 }
+      { source: '<' + result.title + '>', target: '장소', value: 1 },
+      { source: '<' + result.title + '>', target: '등장인물', value: 1 }
     );
 
     // data push
