@@ -60,12 +60,16 @@ const MainPageSecondBox = () => {
     );
   };
 
+  const handleWheel = (e: React.WheelEvent) => {
+    e.stopPropagation(); // 부모 컴포넌트로의 이벤트 전파를 막음
+  };
+
   return (
     <LayoutWrapper>
       <>
         <SampleContainer>
           <SampleNovelSelector select={select} setSelect={setSelect} />
-          <TextBox>{sampleNovel[select]}</TextBox>
+          <TextBox onWheel={handleWheel}>{sampleNovel[select]}</TextBox>
           <ConvertButton onClick={() => setIsClick(true)}>
             대본 변환
           </ConvertButton>
@@ -73,7 +77,7 @@ const MainPageSecondBox = () => {
         <ArrowRightIcon />
         <SampleContainer>
           <div style={{ height: '30px' }} />
-          <TextBox>
+          <TextBox onWheel={handleWheel}>
             {isClick &&
               !demoQuery.isLoading &&
               demoQuery.data.result.sampleScript}{' '}
